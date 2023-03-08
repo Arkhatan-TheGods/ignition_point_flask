@@ -1,4 +1,5 @@
 # ambiente
 env_wine/
 
-tests/__pycache__/app.cpython-311.pyc
+# cache
+__pycache__/
