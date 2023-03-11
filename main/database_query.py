@@ -26,6 +26,10 @@ def find_costumer_by_name() -> str:
     query = "SELECT * FROM CLIENTE WHERE LOWER(NOME) LIKE LOWER(:nome) LIMIT 10;"
     return query
 
+def find_costumer_by_cpf() -> str:
+    query = "SELECT * FROM CLIENTE WHERE CPF = :cpf ;"
+    return query
+
 
 def update_costumer() -> str:
     query = """UPDATE CLIENTE 

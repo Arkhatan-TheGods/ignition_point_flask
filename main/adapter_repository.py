@@ -21,6 +21,10 @@ def costumer(operation: Operation) -> dict:
         query = database_query.find_costumer_by_name()
         return operation['fetchall'](query, name)
 
+    def find_costumer_by_cpf(cpf: str) -> tuple:
+        query = database_query.find_costumer_by_cpf()
+        return operation["fetchone"](query, cpf)
+
     def update_costumer_by_id(values: tuple) -> None:
         query = database_query.update_costumer()
         return operation['execute'](query, values)
