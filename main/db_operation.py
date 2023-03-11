@@ -35,6 +35,9 @@ def create_table_costumer() -> None:
         conn = connect_to_db()
         cursor = conn.cursor()
         cursor.execute(database_query.create_table_costumer())
-        conn.close()
+        
     except Exception as e:
         print(e)
+
+    finally:
+        conn.close()
