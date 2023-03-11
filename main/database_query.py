@@ -21,6 +21,12 @@ def find_costumer_by_id() -> str:
     query = "SELECT * FROM CLIENTE WHERE ID = :id ;"
     return query
 
+
+def find_costumer_by_name() -> str:
+    query = "SELECT * FROM CLIENTE WHERE LOWER(NOME) LIKE LOWER(:nome) LIMIT 10;"
+    return query
+
+
 def update_costumer() -> str:
     query = """UPDATE CLIENTE 
     SET NOME = :nome, 

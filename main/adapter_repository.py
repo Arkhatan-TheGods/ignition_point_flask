@@ -22,3 +22,5 @@ def costumer(operation: Operation) -> dict:
     def show_all_costumer() -> list[tuple]:
         query = database_query.all_costumer()
         return operation['all'](query)
+
+    return {'new_costumer':new_costumer, 'get_costumer':get_costumer_by_id, 'show_all':show_all_costumer()}
