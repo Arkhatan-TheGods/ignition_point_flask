@@ -12,15 +12,30 @@ def costumer(operation: Operation) -> dict:
     def new_costumer(values: tuple) -> None:
         query = database_query.new_costumer()
         return operation['execute'](query, values)
-        
 
-    def get_costumer_by_id(id: int) -> tuple[str,str,str,str]:
+    def get_costumer_by_id(id: int) -> tuple[int, str, str, str, str]:
         query = database_query.find_costumer_by_id()
-        return operation['fetchone'](query,id)
-    
+        return operation['fetchone'](query, id)
+
+    def get_costumer_by_name(name: str) -> tuple[int, str, str, str, str]:
+        query = database_query.find_costumer_by_name()
+        return operation['fetchall'](query, name)
+
+    def update_costumer_by_id(values: tuple) -> None:
+        query = database_query.update_costumer()
+        return operation['execute'](query, values)
+
+    def delete_costumer_by_id(id:int) -> None:
+        query = database_query.delete_costumer()
+        return operation['execute'](query, id)
 
     def show_all_costumer() -> list[tuple]:
         query = database_query.all_costumer()
         return operation['all'](query)
 
-    return {'new_costumer':new_costumer, 'get_costumer':get_costumer_by_id, 'show_all':show_all_costumer()}
+    return {'new_costumer': new_costumer,
+            'get_costumer_by_id': get_costumer_by_id,
+            'get_costumer_by_name': get_costumer_by_name,
+            'update_costumer': update_costumer_by_id,
+            'delete_costumer': delete_costumer_by_id,
+            'show_all': show_all_costumer()}
