@@ -1,8 +1,16 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 from waitress import serve
 from costumer_services import costumer_service
 import db_operation as operation
 from traceback import print_exc
+import adapter_repository as adapter
+from sqlite3 import Connection, Cursor
+
+
+def container(cursor: Cursor) -> dict:
+    costumer = costumer_service(adapter.costumer(operation.operator(cursor)))
+
+    return costumer
 
 
 app = Flask(__name__)
@@ -15,23 +23,9 @@ def hello():
     operation.create_table_costumer()
     return {'message': "Hello Buddy"}
 
+app.add_url_rule('/all_costumers', 'all_results', all_results)
+#@app.route('/all_costumers', methods=['GET'])
 
-@app.route('/all_costumers')
-def all_results():
-    try:
-
-        conn = operation.connect_to_db()
-
-    except Exception as e:
-        print(e)
-        print_exc()
-    else:
-        fn = costumer_service(conn)
-        results = fn['all']()
-
-    finally:
-        conn.close()
-        return jsonify(results) if results else {'results': 'none'}
 
 
 # aqui inicia o app e o servidor

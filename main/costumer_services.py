@@ -1,10 +1,8 @@
-from sqlite3 import Cursor, connect, Connection
-import adapter_repository as adapter
-import db_operation as operation
 from time import sleep
+from typing import Callable
 
 
-def costumer_service(conn):
+def costumer_service(repository: Callable) -> dict:
 
     def add() -> tuple:
         name = input('Nome: ').strip()
@@ -34,20 +32,23 @@ def costumer_service(conn):
                 values_dict['data_nascimento'],
                 values_dict['endereço'], ID)
 
+    # def get_all() -> list[tuple]:
+    #     if conn is None:
+    #         raise Exception('falha de conexão com o banco de dados')
+    #         # conn = operation.connect_to_db()
+
+    #     costumers = []
+    #     cursor = conn.cursor()
+    #     costumer = adapter.costumer(operation.operator(cursor))
+    #     results = costumer['show_all']()
+    #     for v in results:
+    #         costumers.append(v)
+    #         sleep(0.2)
+
+    #     return costumers
+
     def get_all() -> list[tuple]:
-        if conn is None:
-            raise Exception('falha de conexão com o banco de dados')
-            # conn = operation.connect_to_db()
-
-        costumers = []
-        cursor = conn.cursor()
-        costumer = adapter.costumer(operation.operator(cursor))
-        results = costumer['show_all']()
-        for v in results:
-            costumers.append(v)
-            sleep(0.2)
-
-        return costumers
+        return repository['all']()
 
     return {'add': add,
             'update': update,

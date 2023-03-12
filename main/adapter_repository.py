@@ -33,7 +33,7 @@ def costumer(operation: Operation) -> dict:
         query = database_query.delete_costumer()
         return operation['execute'](query, id)
 
-    def show_all_costumer() -> list[tuple]:
+    def all() -> list[tuple]:
         query = database_query.all_costumer()
         return operation['all'](query)
 
@@ -42,4 +42,4 @@ def costumer(operation: Operation) -> dict:
             'get_costumer_by_name': get_costumer_by_name,
             'update_costumer': update_costumer_by_id,
             'delete_costumer': delete_costumer_by_id,
-            'show_all': show_all_costumer}
+            'all': all}
