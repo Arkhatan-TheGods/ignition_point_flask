@@ -21,13 +21,17 @@ def all_results():
     try:
 
         conn = operation.connect_to_db()
-        fn = costumer_service(conn)
-        results = fn['all']()
-        return jsonify(results) if results else {'results': 'none'}
 
     except Exception as e:
         print(e)
         print_exc()
+    else:
+        fn = costumer_service(conn)
+        results = fn['all']()
+
+    finally:
+        conn.close()
+        return jsonify(results) if results else {'results': 'none'}
 
 
 # aqui inicia o app e o servidor

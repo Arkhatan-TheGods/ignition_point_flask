@@ -35,26 +35,19 @@ def costumer_service(conn):
                 values_dict['endereço'], ID)
 
     def get_all() -> list[tuple]:
-        costumers = []
-        try:
-            if conn is None:
-                raise Exception('falha de conexão com o banco de dados')
+        if conn is None:
+            raise Exception('falha de conexão com o banco de dados')
             # conn = operation.connect_to_db()
 
-        except Exception as e:
-            costumers = []
-            print(e)
+        costumers = []
+        cursor = conn.cursor()
+        costumer = adapter.costumer(operation.operator(cursor))
+        results = costumer['show_all']()
+        for v in results:
+            costumers.append(v)
+            sleep(0.2)
 
-        else:
-            cursor = conn.cursor()
-            costumer = adapter.costumer(operation.operator(cursor))
-            results = costumer['show_all']()
-            for v in results:
-                costumers.append(v)
-                sleep(0.2)
-
-        finally:
-            return costumers
+        return costumers
 
     return {'add': add,
             'update': update,
