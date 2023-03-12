@@ -40,3 +40,4 @@ if __name__ == "__main__":
     # comando para rodar via powershell: waitress-serve --host=127.0.0.1 --port=8080 main.app:app
     # serve(app, _quiet=True, host='127.0.0.1', port=8080, url_scheme='https', _profile=True)
     app.run(debug=True, host='127.0.0.1', port=8080)
+

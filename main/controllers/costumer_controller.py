@@ -1,6 +1,7 @@
 from typing import Callable
 from flask import Response
 
+# goto: implementar decorador para IoC
 
 def costumer_controller(services: Callable) -> dict:
     def all_results() -> Response:
