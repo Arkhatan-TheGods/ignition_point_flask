@@ -3,3 +3,7 @@ env_wine/
 
 # cache
 __pycache__/
+
+#database 
+store.db 
+Store.db 

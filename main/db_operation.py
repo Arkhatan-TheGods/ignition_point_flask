@@ -16,10 +16,10 @@ def operator(cursor: Cursor) -> Operation:
     def fetchall(query: str, parameters: tuple) -> list[tuple]:
         return cursor.execute(query, parameters).fetchall()
     
-    def all(query: str) -> list[tuple]:
+    def all_results(query: str) -> list[tuple]:
         return cursor.execute(query).fetchall()
 
-    return {"execute": execute, "fetchone": fetchone, "fetchall": fetchall, "all": all}
+    return {"execute": execute, "fetchone": fetchone, "fetchall": fetchall, "all": all_results}
 
 
 def connect_to_db() -> Connection:

@@ -42,4 +42,4 @@ def costumer(operation: Operation) -> dict:
             'get_costumer_by_name': get_costumer_by_name,
             'update_costumer': update_costumer_by_id,
             'delete_costumer': delete_costumer_by_id,
-            'show_all': show_all_costumer()}
+            'show_all': show_all_costumer}
