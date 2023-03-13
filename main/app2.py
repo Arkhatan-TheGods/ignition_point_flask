@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, Response
-from waitress import serve
-from costumer_services import costumer_service
+from costumer_services import costumer_service as service
 import db_operation as operation
 from traceback import print_exc
 import adapter_repository as adapter
@@ -25,7 +24,17 @@ app = Flask(__name__)
 def home() -> str:
     return 'Hello, buddy!'
 
-app.add_url_rule('/costumers', 'costumers', all_info, methods=['GET'])
+conn = operation.connect_to_db()
+cursor = conn.cursor()
+
+@app.route('/costumers')
+def all(cursor) -> jsonify:
+    results = cursor.execute('select * from cliente;').fetchall()
+    return jsonify(results)
+
+all(cursor)
+conn.close()
+# app.add_url_rule('/costumers', 'costumers', all_info, methods=['GET'])
 
 
 

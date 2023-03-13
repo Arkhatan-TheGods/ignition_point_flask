@@ -29,7 +29,7 @@ def routing(app):
 
     conn = operation.connect_to_db()
     cursor = conn.cursor()
-    app.add_url_rule('/all_costumers', 'all_results', costumer_controller(container(cursor))['all'])
+    app.add_url_rule('/all_costumers', 'all_results', costumer_controller)#container(cursor))['all'])
     # @app.route('/all_costumers', methods=['GET'])
     conn.close()
 
