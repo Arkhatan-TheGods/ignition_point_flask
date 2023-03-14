@@ -8,10 +8,10 @@ from sqlite3 import Connection, Cursor
 from controllers.costumer_controller import costumer_controller
 
 
-def container(cursor: Cursor) -> dict:
-    costumer = costumer_service(adapter.costumer(operation.operator(cursor)))
+def container(cursor: Cursor):
+    # costumer = costumer_service(adapter.costumer(operation.operator(cursor)))
 
-    return costumer
+    pass
 
 
 print('chegando aqui<<<<<<<<<<<<<<<<<<<<<<')

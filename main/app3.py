@@ -1,64 +1,14 @@
-from typing import Callable
 from flask import Flask
-from costumer_services import costumer_service
-from sqlite3 import Connection, Cursor, connect
+from sqlite3 import Connection, connect
+
+
 
 from routes.costumer_route import costumer_route
+
+from decorators.decorator import decorator
 # from routes.products_route import products_route
 
 from controllers.costumer_controller import costumer_controller
-
-from infra.repositories.repository import repository
-from infra.repositories.costumer_repository import costumer_repository
-from infra.repositories.products_repository import products_repository
-
-
-def container(cursor: Cursor) -> tuple:
-
-    costumer = costumer_service(costumer_repository(repository(cursor)))
-    products = costumer_service(products_repository(repository(cursor)))
-
-    return costumer, products
-
-def injector(type_service:str) -> Callable:
-
-    def decorator(func: Callable):
-        
-        def wrapper(*args, **kwargs):
-
-            conn: Connection = connect('store.db')
-        
-            service: dict = {}
-        
-            try:
-
-                costumer, products = container(conn.cursor())
-
-                match type_service:
-                    case 'COSTUMER':
-                        service = costumer
-                    case 'PRODUCTS':
-                        service = products
-                
-                services = func(*args, **service, **kwargs)
-                
-
-            except:
-                conn.rollback()
-                raise
-
-            else:
-
-                conn.commit()
-
-            finally:
-                conn.close()
-
-            return services
-        return wrapper
-
-    return decorator
-
 
 def create_tables():
 
@@ -91,7 +41,7 @@ def main(app: Flask):
 
     create_tables()
 
-    costumer_route(app, costumer_controller(injector, "COSTUMER"))
+    costumer_route(app, costumer_controller(decorator(), "COSTUMER"))
 
 
 if __name__ == "__main__":
