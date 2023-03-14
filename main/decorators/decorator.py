@@ -3,16 +3,16 @@ from sqlite3 import Connection, connect
 from infra.dependency_injector import container
 
 
-def decorator():
+def decorator(data_base: str):
 
-    def services(type_service:str) -> Callable:
+    def services(type_service: str) -> Callable:
 
         def decorator(func: Callable):
-            
+
             def wrapper(*args, **kwargs):
 
-                conn: Connection = connect('store.db')
-            
+                conn: Connection = connect(data_base)
+
                 service: dict = {}
 
                 response: dict = {}
@@ -32,10 +32,10 @@ def decorator():
                                 service = costumer
                             case 'PRODUCTS':
                                 service = products
-                        
+
                         response = func(*args, **service, **kwargs)
 
-                    except  Exception as ex:
+                    except Exception as ex:
                         print("Erro", ex)
                         conn.rollback()
                     else:
@@ -43,7 +43,7 @@ def decorator():
 
                 finally:
                     conn.close()
-                    
+
                     return response
 
             return wrapper
