@@ -1,75 +1,81 @@
-from flask import Flask, jsonify, Response
-from waitress import serve
+from typing import Callable
+from flask import Flask
 from costumer_services import costumer_service
-import db_operation as operation
-from traceback import print_exc
-import adapter_repository as adapter
 from sqlite3 import Connection, Cursor, connect
 
 from routes.costumer_route import costumer_route
 from routes.products_route import products_route
 
 from controllers.costumer_controller import costumer_controller
-from controllers.products_controller import products_controller
 
+from infra.repositories.repository import repository
+from infra.repositories.costumer_repository import costumer_repository
+from infra.repositories.products_repository import products_repository
 
 
 def container(cursor: Cursor) -> tuple:
 
-    costumer = costumer_service(adapter.costumer(operation.operator(cursor)))
-    products = costumer_service(adapter.costumer(operation.operator(cursor)))
+    costumer = costumer_service(costumer_repository(repository(cursor)))
+    products = costumer_service(products_repository(repository(cursor)))
 
     return costumer, products
 
-# def container_dependence_injection(func):
 
-#     def wrapper(*args, **kwargs):
-
-#         print("Something is happening before the function is called.")
-
-#         container()
-
-#         func(*args, **kwargs)
-#         # response = func(*args, **kwargs)
-
-#         # print(response)
-
-#         print("Something is happening after the function is called.")
-
-#     return wrapper
-
-def injector(func):
+def injector(func: Callable) -> Callable:
 
     def wrapper(*args, **kwargs):
-        
-        conn = connect('store.db')
+
+        conn: Connection = connect('store.db')
 
         try:
 
-            cursor = conn.cursor()
+            costumer, products = container(conn.cursor())
 
-            costumer, products = container(cursor)
-            
             result = func(*args, **costumer, **kwargs)
 
         except:
             conn.rollback()
             print("SQL failed")
             raise
-    
+
         else:
             conn.commit()
-    
+
         finally:
             conn.close()
-    
+
         return result
-    
+
     return wrapper
+
+def create_tables():
+
+    conn: Connection | None = None
+
+    try:
+        conn = connect('store.db')
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS CLIENTE(
+            ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            NOME TEXT NOT NULL, 
+            CPF TEXT NOT NULL UNIQUE, 
+            DATA_NASCIMENTO TEXT NOT NULL, 
+            ENDERECO TEXT NOT NULL
+            );""")
+
+    except Exception as e:
+        print(e)
+
+    finally:
+        if conn:
+            conn.close()
 
 app = Flask(__name__)
 
 def main(app: Flask):
+
+    create_tables()
 
     costumer_route(app, costumer_controller(injector))
 

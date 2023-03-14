@@ -10,11 +10,9 @@ def costumer_controller(service: Callable):
         
         services = kwargs
 
-        result = services["all"]()
+        costumers = services["all"]()
 
-        print("result :>>>>>>>>", result )
-
-        return {"resposta": result}
+        return {"costumers": costumers}
 
     return {'all': all_results}
 
