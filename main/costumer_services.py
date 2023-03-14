@@ -2,7 +2,7 @@ from time import sleep
 from typing import Callable
 
 
-def costumer_service(repository: Callable) -> dict:
+def costumer_service(repository: dict) -> dict:
 
     def add() -> tuple:
         name = input('Nome: ').strip()
@@ -48,6 +48,7 @@ def costumer_service(repository: Callable) -> dict:
     #     return costumers
 
     def get_all() -> list[tuple]:
+
         return repository['all']()
 
     return {'add': add,
