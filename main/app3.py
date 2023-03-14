@@ -16,7 +16,6 @@ build_tables('store.db')
 
 costumer_route(app, costumer_controller(decorator('store.db'), "COSTUMER"))
 
-
 if __name__ == "__main__":
 
     app.run(debug=True, use_reloader=False, host='127.0.0.1', port=8080)

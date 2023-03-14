@@ -32,21 +32,6 @@ def costumer_service(repository: dict) -> dict:
                 values_dict['data_nascimento'],
                 values_dict['endereço'], ID)
 
-    # def get_all() -> list[tuple]:
-    #     if conn is None:
-    #         raise Exception('falha de conexão com o banco de dados')
-    #         # conn = operation.connect_to_db()
-
-    #     costumers = []
-    #     cursor = conn.cursor()
-    #     costumer = adapter.costumer(operation.operator(cursor))
-    #     results = costumer['show_all']()
-    #     for v in results:
-    #         costumers.append(v)
-    #         sleep(0.2)
-
-    #     return costumers
-
     def get_all() -> list[tuple]:
 
         return repository['all']()
