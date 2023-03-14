@@ -4,7 +4,7 @@ from costumer_services import costumer_service
 from sqlite3 import Connection, Cursor, connect
 
 from routes.costumer_route import costumer_route
-from routes.products_route import products_route
+# from routes.products_route import products_route
 
 from controllers.costumer_controller import costumer_controller
 
@@ -20,33 +20,45 @@ def container(cursor: Cursor) -> tuple:
 
     return costumer, products
 
+def injector(type_service:str) -> Callable:
 
-def injector(func: Callable) -> Callable:
+    def decorator(func: Callable):
+        
+        def wrapper(*args, **kwargs):
 
-    def wrapper(*args, **kwargs):
+            conn: Connection = connect('store.db')
+        
+            service: dict = {}
+        
+            try:
 
-        conn: Connection = connect('store.db')
+                costumer, products = container(conn.cursor())
 
-        try:
+                match type_service:
+                    case 'COSTUMER':
+                        service = costumer
+                    case 'PRODUCTS':
+                        service = products
+                
+                services = func(*args, **service, **kwargs)
+                
 
-            costumer, products = container(conn.cursor())
+            except:
+                conn.rollback()
+                raise
 
-            result = func(*args, **costumer, **kwargs)
+            else:
 
-        except:
-            conn.rollback()
-            print("SQL failed")
-            raise
+                conn.commit()
 
-        else:
-            conn.commit()
+            finally:
+                conn.close()
 
-        finally:
-            conn.close()
+            return services
+        return wrapper
 
-        return result
+    return decorator
 
-    return wrapper
 
 def create_tables():
 
@@ -73,11 +85,13 @@ def create_tables():
 
 app = Flask(__name__)
 
+app.add_url_rule
+
 def main(app: Flask):
 
     create_tables()
 
-    costumer_route(app, costumer_controller(injector))
+    costumer_route(app, costumer_controller(injector, "COSTUMER"))
 
 
 if __name__ == "__main__":

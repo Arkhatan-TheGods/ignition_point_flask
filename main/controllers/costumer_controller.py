@@ -1,13 +1,11 @@
 from typing import Callable
 
 
-def costumer_controller(service: Callable):
+def costumer_controller(service: Callable, name: str):
 
-    @service
+    @service(name)
     def all_results(*args, **kwargs):
 
-        # print("kwargs:", kwargs)
-        
         services = kwargs
 
         costumers = services["all"]()
