@@ -1,7 +1,7 @@
 from db_context import Connection
 
 
-def setup_tables(conn: Connection, query: str):
+def create_tables(conn: Connection, query: str):
 
     status: bool = False
 
