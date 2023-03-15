@@ -1,12 +1,12 @@
 from flask import Flask
 
-from infra.db.tables import build_tables
+from main.infra.db.query_tables import query_tables
 
 from routes.routing import routing
 
 app = Flask(__name__)
 
-build_tables('store.db')
+query_tables()
 
 routing(app, 'store.db')
 
