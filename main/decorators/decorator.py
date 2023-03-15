@@ -3,51 +3,47 @@ from sqlite3 import Connection, connect
 from infra.dependency_injector import container
 
 
-def decorator(data_base: str):
+def services_decorator(data_base: str, type_service: str) -> Callable:
 
-    def services(type_service: str) -> Callable:
+    def decorator(func: Callable) -> Callable:
 
-        def decorator(func: Callable):
+        def wrapper(*args, **kwargs) -> dict:
 
-            def wrapper(*args, **kwargs):
+            conn: Connection = connect(data_base)
 
-                conn: Connection = connect(data_base)
+            service: dict = {}
 
-                service: dict = {}
+            response: dict = {}
 
-                response: dict = {}
+            try:
+
+                costumer, products = container(conn.cursor())
+
+            except Exception as ex:
+                print("Erro", ex)
+
+            else:
 
                 try:
+                    match type_service:
+                        case 'COSTUMER':
+                            service = costumer
+                        case 'PRODUCTS':
+                            service = products
 
-                    costumer, products = container(conn.cursor())
+                    response = func(*args, **service, **kwargs)
 
                 except Exception as ex:
                     print("Erro", ex)
-
+                    conn.rollback()
                 else:
+                    conn.commit()
 
-                    try:
-                        match type_service:
-                            case 'COSTUMER':
-                                service = costumer
-                            case 'PRODUCTS':
-                                service = products
+            finally:
+                conn.close()
 
-                        response = func(*args, **service, **kwargs)
+                return response
 
-                    except Exception as ex:
-                        print("Erro", ex)
-                        conn.rollback()
-                    else:
-                        conn.commit()
+        return wrapper
 
-                finally:
-                    conn.close()
-
-                    return response
-
-            return wrapper
-
-        return decorator
-
-    return services
+    return decorator
