@@ -1,6 +1,7 @@
+.pytest_cache
 .vscode
 links.txt
-settings.yaml
+*.yaml
 
 # ambiente
 env_wine/
@@ -9,7 +10,4 @@ env_wine/
 __pycache__/
 
 #database 
-store.db 
-Store.db
-
-.pytest_cache
+store.db

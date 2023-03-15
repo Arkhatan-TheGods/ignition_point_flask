@@ -1,15 +1,5 @@
-from db_context import Connection
+from infra.db.db_context import Connection
 
 
-def create_tables(conn: Connection, query: str):
-
-    status: bool = False
-
-    try:
-        conn.cursor().executescript(query)
-    except Exception as ex:
-        print(ex)
-    finally:
-        if conn:
-            status = True
-        return status
+def create_tables(conn: Connection, query: str) -> None:
+    conn.cursor().executescript(query)

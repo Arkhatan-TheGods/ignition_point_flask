@@ -4,7 +4,7 @@ from routes.register_customer_routes import register_customer_routes
 from routes.register_product_routes import register_product_routes
 
 from decorators.decorator import services_decorator
-from main.controllers.costumers_controller import costumer_controller
+from controllers.costumers_controller import costumer_controller
 from controllers.products_controller import products_controller
 
 
