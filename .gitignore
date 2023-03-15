@@ -1,5 +1,5 @@
 .vscode
-*.txt
+links.txt
 
 # ambiente
 env_wine/
