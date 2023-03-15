@@ -16,7 +16,6 @@ def setup() -> Iterable:
 
 # @mark.skip(reason="")
 
-# @mark.skip(reason="")
 def test_check_create_and_find_product_id(setup: tuple[db.Connection, db.Cursor]):
 
     conn, cursor = setup
@@ -24,17 +23,13 @@ def test_check_create_and_find_product_id(setup: tuple[db.Connection, db.Cursor]
     # Act
     db.build_tables(cursor)
 
-    product = ("Black Coffe",)
-
-    query = "INSERT INTO PRODUCTS(NAME) VALUES ($NAME)"
-
-    cursor.execute(query, product)
+    cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME)",
+                   ("Black Coffe",))
 
     conn.commit()
 
-    print("lastrowid:", cursor.lastrowid)
-
-    result = cursor.execute("SELECT ID FROM PRODUCTS")
+    result = cursor.execute("SELECT ID FROM PRODUCTS WHERE ID=$ID",
+                            (cursor.lastrowid, ))
 
     # Assert
     assert (cursor.lastrowid,) == result.fetchone()
@@ -46,26 +41,22 @@ def test_check_edit_product_by_id(setup: tuple[db.Connection, db.Cursor]):
 
     # Act
     db.build_tables(cursor)
+    
+    cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME);", 
+                   ("Black Coffe",))
 
-    costumer = ("Tomás Kaique Assunção",
-                "942.554.492-10",
-                "11/03/1952",
-                "Quadra 12 Conjunto F, 311")
+    product_edit = ("Real Black Coffee", cursor.lastrowid)
 
-    query = """
-    INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
-    VALUES ($NAME, $CPF, $BIRTH_DATE, $ADDRESS)
-    """
-    cursor.execute(query, costumer)
+    cursor.execute("UPDATE PRODUCTS SET NAME = $NAME WHERE ID = $ID;", 
+                   product_edit)
 
     conn.commit()
 
-    print("lastrowid:", cursor.lastrowid)
-
-    result = cursor.execute("SELECT ID FROM COSTUMERS")
+    result = cursor.execute("SELECT NAME, ID FROM PRODUCTS WHERE ID=$ID;",
+                            (cursor.lastrowid,))
 
     # Assert
-    assert (cursor.lastrowid,) == result.fetchone()
+    assert product_edit == result.fetchone()
 
 def test_check_remove_product_by_id(setup: tuple[db.Connection, db.Cursor]):
 
@@ -74,22 +65,16 @@ def test_check_remove_product_by_id(setup: tuple[db.Connection, db.Cursor]):
     # Act
     db.build_tables(cursor)
 
-    costumer = ("Tomás Kaique Assunção",
-                "942.554.492-10",
-                "11/03/1952",
-                "Quadra 12 Conjunto F, 311")
+    cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME);",
+                   ("Black Coffe",))
 
-    query = """
-    INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
-    VALUES ($NAME, $CPF, $BIRTH_DATE, $ADDRESS)
-    """
-    cursor.execute(query, costumer)
+    cursor.execute("DELETE FROM PRODUCTS WHERE ID = $ID;",
+                   (cursor.lastrowid, ))
 
     conn.commit()
 
-    print("lastrowid:", cursor.lastrowid)
-
-    result = cursor.execute("SELECT ID FROM COSTUMERS")
+    result = cursor.execute("SELECT ID FROM PRODUCTS WHERE ID=$ID;",
+                            (cursor.lastrowid, ))
 
     # Assert
-    assert (cursor.lastrowid,) == result.fetchone()
+    assert result.fetchone() is None
