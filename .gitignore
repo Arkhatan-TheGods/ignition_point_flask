@@ -1,5 +1,6 @@
 .vscode
 links.txt
+settings.yaml
 
 # ambiente
 env_wine/
