@@ -7,6 +7,7 @@ def costumer_controller(services: Callable):
     def create(*args, **kwargs) -> dict:
 
         print("args>>>>>>>", args)
+        print("kwargs>>>>>>>", kwargs)
 
         # name
         # cpf
@@ -28,4 +29,4 @@ def costumer_controller(services: Callable):
         return {"costumers": costumers}
 
     return {'create': create,
-            'get_costumer': get_costumer}
+            'all': get_costumer}
