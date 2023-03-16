@@ -1,6 +1,7 @@
 from typing import Callable
-from sqlite3 import Connection, connect
+from infra.db.db_context import Connection, execute_connect
 from infra.dependency_injector import container
+from traceback import format_exc
 
 
 def services_decorator(data_base: str, type_service: str) -> Callable:
@@ -9,38 +10,41 @@ def services_decorator(data_base: str, type_service: str) -> Callable:
 
         def wrapper(*args, **kwargs) -> dict:
 
-            conn: Connection = connect(data_base)
+            print(">>>>>>>>>>>>args:", args)
 
-            service: dict = {}
+            conn: Connection | None = None
 
             response: dict = {}
 
             try:
 
+                conn = execute_connect(data_base)
+
                 costumer, products = container(conn.cursor())
 
-            except Exception as ex:
-                print("Erro", ex)
+                service: dict = {}
 
-            else:
+                match type_service:
+                    case 'COSTUMER':
+                        service = costumer
+                    case 'PRODUCTS':
+                        service = products
 
-                try:
-                    match type_service:
-                        case 'COSTUMER':
-                            service = costumer
-                        case 'PRODUCTS':
-                            service = products
+                response = func(*args, **service, **kwargs)
 
-                    response = func(*args, **service, **kwargs)
+            except Exception:
+                # TODO: Criar funcionalidade para armazenar log de erros
+                print(format_exc())
 
-                except Exception as ex:
-                    print("Erro", ex)
+                if conn:
                     conn.rollback()
-                else:
-                    conn.commit()
+            else:
+                conn.commit()
 
             finally:
-                conn.close()
+
+                if conn:
+                    conn.close()
 
                 return response
 

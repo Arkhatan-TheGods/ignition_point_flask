@@ -1,15 +1,6 @@
-from sqlite3 import Connection, Cursor, connect
+def query_tables() -> str:
 
-conn: Connection | None = None
-
-
-def execute_connect(db: str):
-    return connect(db)
-
-
-def build_tables(cursor: Cursor):
-
-    query = """
+    return """
             BEGIN;
             CREATE TABLE IF NOT EXISTS COSTUMERS(
                 ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -27,4 +18,3 @@ def build_tables(cursor: Cursor):
             );
             COMMIT;
             """
-    cursor.executescript(query)

@@ -1,14 +1,15 @@
 from pytest import fixture, mark
 from typing import Iterable
-import main.infra.db.tables as db
+from main.infra.db.db_context import Connection, Cursor, execute_connect
+from main.infra.db.query_tables import query_tables
 
 
 @fixture(scope="function")
 def setup() -> Iterable:
 
     # Arrange
-    conn: db.Connection = db.execute_connect(":memory:")
-    cursor: db.Cursor = conn.cursor()
+    conn: Connection = execute_connect(":memory:")
+    cursor: Cursor = conn.cursor()
 
     query = """SELECT NAME 
     FROM sqlite_master 
@@ -20,16 +21,13 @@ def setup() -> Iterable:
     # Cleanup
     conn.close()
 
-# @mark.skip(reason="")
-
-
 @mark.parametrize("table", ["COSTUMERS", "PRODUCTS"])
-def test_create_tables_costumers_and_products(setup: tuple[db.Connection, db.Cursor, str], table: str):
+def test_create_tables_costumers_and_products(setup: tuple[Connection, Cursor, str], table: str):
 
     _, cursor, query = setup
 
     # Act
-    db.build_tables(cursor)
+    cursor.executescript(query_tables())
 
     table_name = cursor.execute(query.replace(
         "{TABLE}", table)).fetchone()
