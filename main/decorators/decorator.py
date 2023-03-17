@@ -52,7 +52,7 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
                     conn.rollback()
             else:
                 conn.commit()
-
+                jsonify({"consumer": response})
             finally:
 
                 if conn:

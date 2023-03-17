@@ -10,4 +10,4 @@ env_wine/
 __pycache__/
 
 #database 
-store.db
+*.db
