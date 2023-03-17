@@ -7,9 +7,37 @@ from traceback import format_exc
 
 def services_decorator(request: Request, data_base: str, type_service: str) -> Callable:
 
+    def get_service(container:tuple, type_service: str) -> dict | None:
+        
+        costumer, products = container
+        
+        service: dict | None = {}
+        match type_service:
+            case 'COSTUMER':
+                service = costumer
+            case 'PRODUCTS':
+                service = products
+        return service
+
+    def get_method(methods: str) -> dict | None:
+        params: dict | None = {}
+        match methods:
+            case 'POST':
+                params = {"data": request.get_json()}
+            case 'GET':
+                params = {"id": request.args.get("id", "")}
+            case 'PUT':
+                params = {"id": request.args.get("id", ""),
+                            "data": request.get_json()}
+            case 'DELETE':
+                params = {"id": request.args.get("id", "")}
+
+        return params
+
+
     def decorator(func: Callable) -> Callable:
 
-        def wrapper(*args, **kwargs) -> dict:
+        def wrapper() -> dict:
 
             conn: Connection | None = None
 
@@ -19,30 +47,8 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
 
                 conn = execute_connect(data_base)
 
-                costumer, products = container(conn.cursor())
-
-                service: dict = {}
-
-                match type_service:
-                    case 'COSTUMER':
-                        service = costumer
-                    case 'PRODUCTS':
-                        service = products
-
-                params:dict = {}
-                
-                match request.method.upper():
-                    case 'POST':
-                        params = {"data": request.get_json()}
-                    case 'GET':
-                        params = {"args": request.args.get("id", "")}
-                    case 'PUT':
-                        params = {"args": request.args.get("id", ""),
-                                  "data": request.get_json()}
-                    case 'DELETE':
-                        params = {"args": request.args.get("id", "")}
-
-                response = func(*args, **params, **service, **kwargs)
+                response = func(get_method(request.method.upper()),
+                                services=get_service(container(conn.cursor()), type_service))
 
             except Exception:
                 # TODO: Criar funcionalidade para armazenar log de erros
@@ -52,7 +58,6 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
                     conn.rollback()
             else:
                 conn.commit()
-                jsonify({"consumer": response})
             finally:
 
                 if conn:
