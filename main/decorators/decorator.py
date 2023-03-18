@@ -23,7 +23,7 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
 
     def get_method(methods: str) -> dict | None:
 
-        match methods:
+        match methods.upper():
             case 'POST':
                 params = {"data": request.get_json()}
             case 'GET':
@@ -50,7 +50,7 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
 
                 conn = execute_connect(data_base)
 
-                result = func(get_method(request.method.upper()),
+                result = func(get_method(request.method),
                                 services=get_service(container(conn.cursor()), type_service))
 
             except Exception:
