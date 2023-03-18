@@ -1,7 +1,7 @@
 from typing import Callable
 
 
-def costumer_controller(services: Callable):
+def costumer_controller(services: Callable) -> dict:
 
     @services
     def create(*args, **kwargs) -> dict:
