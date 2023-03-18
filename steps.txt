@@ -1,0 +1,4 @@
+no routing, quais são os argumentos passados/injetados? o app, função request do flask e o caminho do banco
+dentro de routing existem funções sendo chamadas como a register_customer_routes(...) que vai fazer um caminho de rota de requisição e 
+nela são injetados/argumentados no caso o app e o controller que no caso é o costumer_controller que estará recebendo o services_decorator
+na qual possui a função principal de identificar o serviço, o método e irá retornar um dicionário para ser manipulado dentro de?

@@ -15,7 +15,7 @@ def costumer_controller(services: Callable):
         return {"data": "Cliente cadastrado com sucesso", "status_code": 200}
 
     @services
-    def get_costumer(**kwargs):
+    def get_costumer(**kwargs) -> dict:
 
         costumers = kwargs["services"]["all"]()
 
