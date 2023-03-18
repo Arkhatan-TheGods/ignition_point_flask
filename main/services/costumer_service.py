@@ -7,13 +7,13 @@ def costumer_service(costumer_repository: dict) -> dict:
 
         print("costumer_service.add.row_id:_", row_id)
 
-    def get_by_cpf() -> str:
+    def get_by_cpf() -> tuple:
 
-        cpf = costumer_repository['all']()
+        cpf = costumer_repository['get_by_cpf']()
 
         print("costumer_service.get_by_cpf.result:_", cpf)
 
-        return
+        return cpf,
 
     def get_all() -> list[tuple]:
 
@@ -45,5 +45,6 @@ def costumer_service(costumer_repository: dict) -> dict:
         #         values_dict['endereço'], ID)
 
     return {'add': add,
+            'get_by_cpf': get_by_cpf,
             'update': update,
             'all': get_all}

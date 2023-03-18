@@ -6,7 +6,9 @@ def costumer_controller(services: Callable):
     @services
     def create(*args, **kwargs) -> dict:
 
-        row_id = kwargs["services"]["add"](args[0])
+        costumer = tuple(args[0]["data"].values())
+
+        row_id = kwargs["services"]["add"](costumer)
 
         print("costumer_controller.create.row_id:_", row_id)
 
