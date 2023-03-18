@@ -1,4 +1,4 @@
-from flask import Request
+from flask import Request, Response
 from typing import Callable, Any
 from infra.db.db_context import Connection, execute_connect
 from infra.dependency_injector import container
@@ -6,7 +6,7 @@ from traceback import format_exc
 
 
 def services_decorator(request: Request, data_base: str, type_service: str) -> Callable:
-
+    
     def get_service(container: tuple, type_service: str) -> dict | None:
 
         costumer, products = container
@@ -40,23 +40,23 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
 
     def decorator(func: Callable) -> Callable:
 
-        def wrapper() -> dict:
+        def wrapper() -> Response:
 
             conn: Connection | None = None
 
-            response: dict = {}
+            result: dict = {}
 
             try:
 
                 conn = execute_connect(data_base)
 
-                response = func(get_method(request.method.upper()),
+                result = func(get_method(request.method.upper()),
                                 services=get_service(container(conn.cursor()), type_service))
 
             except Exception:
                 # TODO: Criar funcionalidade para armazenar log de erros
                 print(format_exc())
-
+                result.update({"data": "Erro no servidor", "status_code": 500})
                 if conn:
                     conn.rollback()
             else:
@@ -66,7 +66,9 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
                 if conn:
                     conn.close()
 
-                return response
+                return Response(result["data"],
+                                status=result["status_code"],
+                                mimetype='application/json')
 
         return wrapper
 

@@ -2,8 +2,9 @@ from sqlite3 import Cursor
 
 def repository(cursor: Cursor) -> dict:
     def execute(query: str, parameters: tuple):
-        return cursor.execute(query, parameters)
-
+        cursor.execute(query, parameters)
+        return cursor.fetchone()
+    
     def fetchone(query: str, parameters: tuple) -> tuple:
         return cursor.execute(query, parameters).fetchone()
 

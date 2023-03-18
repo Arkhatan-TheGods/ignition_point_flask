@@ -6,27 +6,20 @@ def costumer_controller(services: Callable):
     @services
     def create(*args, **kwargs) -> dict:
 
-        print("args>>>>>>>", args)
-        print("kwargs>>>>>>>", kwargs)
+        row_id = kwargs["services"]["add"](args[0])
 
-        # name
-        # cpf
-        # data_nascimento
-        # endereco = args
+        print("costumer_controller.create.row_id:_", row_id)
 
-        # services = kwargs
-        # services["add"](args)
-
-        return {"message": "Cliente cadastrado com sucesso"}
+        return {"data": "Cliente cadastrado com sucesso", "status_code": 200}
 
     @services
-    def get_costumer(*args, **kwargs):
+    def get_costumer(**kwargs):
 
-        services = kwargs
+        costumers = kwargs["services"]["all"]()
 
-        costumers = services["all"]()
+        print("costumer_controller.get_costumer.costumers:_", costumers)
 
-        return {"costumers": costumers}
+        return {"data": costumers, "status_code": 200}
 
     return {'create': create,
             'all': get_costumer}
