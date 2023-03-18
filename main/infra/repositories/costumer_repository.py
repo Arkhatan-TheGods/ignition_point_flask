@@ -1,23 +1,26 @@
 import database_query
-# from typing import TypedDict, Callable, Any
 
 def costumer_repository(repository: dict) -> dict:
 
-    def new_costumer(values: tuple) -> None:
-        query = database_query.new_costumer()
-        return repository['execute'](query, values)
+    def add(costumer: tuple) -> tuple:
+        print("costumer>>>>>>>>", costumer)
+        return repository['execute']("""INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
+        VALUES(:NAME, :CPF, :BIRTH_DATE, :ADDRESS);""", costumer)
 
-    def get_costumer_by_id(id: int) -> tuple[int, str, str, str, str]:
-        query = database_query.find_costumer_by_id()
-        return repository['fetchone'](query, id)
+    def get_by_id(costumer_id: int) -> tuple:
 
-    def get_costumer_by_name(name: str) -> tuple[int, str, str, str, str]:
-        query = database_query.find_costumer_by_name()
-        return repository['fetchall'](query, name)
+        return repository["fetchone"]("SELECT ID, NAME, CPF, BIRTH_DATE, ADDRESS \
+                                      FROM COSTUMERS WHERE ID = :ID;", costumer_id)
 
-    def find_costumer_by_cpf(cpf: str) -> tuple:
-        query = database_query.find_costumer_by_cpf()
-        return repository["fetchone"](query, cpf)
+    def get_by_name(name: str) -> tuple:
+        
+        return repository['fetchall']("SELECT ID, NAME, CPF, BIRTH_DATE, ADDRESS \
+                                      FROM CLIENTE WHERE LOWER(NAME) = '%:NAME' AND LIMIT 10;", name)
+
+    def get_by_cpf(cpf: str) -> tuple:
+
+        return repository["fetchone"]("SELECT ID, NAME, CPF, BIRTH_DATE, \
+                                      ADDRESS FROM COSTUMERS WHERE CPF = :CPF;", cpf)
 
     def update_costumer_by_id(values: tuple) -> None:
         query = database_query.update_costumer()
@@ -27,12 +30,13 @@ def costumer_repository(repository: dict) -> dict:
         query = database_query.delete_costumer()
         return repository['execute'](query, id)
 
-    def all() -> list[tuple]:
-        return repository['all']("SELECT * FROM CLIENTE;")
+    def get_all() -> list[tuple]:
+        return repository['all']("SELECT * FROM COSTUMERS;")
 
-    return {'new_costumer': new_costumer,
-            'get_costumer_by_id': get_costumer_by_id,
-            'get_costumer_by_name': get_costumer_by_name,
+    return {'add': add,
+            'get_costumer_by_id': get_by_id,
+            'get_costumer_by_name': get_by_name,
+            'get_by_cpf': get_by_cpf,
             'update_costumer': update_costumer_by_id,
             'delete_costumer': delete_costumer_by_id,
-            'all': all}
+            'all': get_all}

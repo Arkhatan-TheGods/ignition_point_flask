@@ -1,14 +1,27 @@
-from typing import Callable
 
-
-def costumer_service(repositories: dict) -> dict:
+def costumer_service(costumer_repository: dict) -> dict:
 
     def add(costumer: tuple) -> None:
-        # name = input('Nome: ').strip()
-        # cpf = input('CPF:').strip()
-        # data_nascimento = input('data de nascimento (DD/MM/AAAA): ').strip()
-        # endereco = input('Endereço: ').strip()
-        pass
+
+        row_id = costumer_repository['add'](costumer)
+
+        print("costumer_service.add.row_id:_", row_id)
+
+    def get_by_cpf() -> tuple:
+
+        cpf = costumer_repository['get_by_cpf']()
+
+        print("costumer_service.get_by_cpf.result:_", cpf)
+
+        return cpf,
+
+    def get_all() -> list[tuple]:
+
+        result = costumer_repository['all']()
+
+        print("costumer_service.get_all.result:_", result)
+
+        return []
 
     def update(costumer, ID: int) -> None:
         pass
@@ -31,10 +44,7 @@ def costumer_service(repositories: dict) -> dict:
         #         values_dict['data_nascimento'],
         #         values_dict['endereço'], ID)
 
-    def get_all() -> list[tuple]:
-
-        return repositories['all']()
-
     return {'add': add,
+            'get_by_cpf': get_by_cpf,
             'update': update,
-            'all': get_all, }
+            'all': get_all}
