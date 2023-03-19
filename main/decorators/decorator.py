@@ -5,38 +5,10 @@ from infra.dependency_injector import container
 from traceback import format_exc
 
 
-def services_decorator(request: Request, data_base: str, type_service: str) -> Callable:
-    
-    def get_service(container: tuple, type_service: str) -> dict | None:
+# def services_decorator(request: Request, get_service: Callable, get_method: Callable, data_base: str, type_service: str) -> Callable:
+def services_decorator(*args) -> Callable:
 
-        costumer, products = container
-
-        match type_service:
-            case 'COSTUMER':
-                service = costumer
-            case 'PRODUCTS':
-                service = products
-            case _:
-                service: dict | None = {}
-
-        return service
-
-    def get_method(methods: str) -> dict | None:
-
-        match methods.upper():
-            case 'POST':
-                params = {"data": request.get_json()}
-            case 'GET':
-                params = {"id": request.args.get("id", "")}
-            case 'PUT':
-                params = {"id": request.args.get("id", ""),
-                          "data": request.get_json()}
-            case 'DELETE':
-                params = {"id": request.args.get("id", "")}
-            case _:
-                params: dict | None = None
-
-        return params
+    request, check_params, get_service, data_base, type_service = args
 
     def decorator(func: Callable) -> Callable:
 
@@ -50,7 +22,7 @@ def services_decorator(request: Request, data_base: str, type_service: str) -> C
 
                 conn = execute_connect(data_base)
 
-                result = func(get_method(request.method),
+                result = func(check_params(request),
                                 services=get_service(container(conn.cursor()), type_service))
 
             except Exception:
