@@ -10,7 +10,7 @@ def customer_decorator(validators: tuple) -> tuple:
         def wrapper(customer: tuple) -> tuple:
 
             if [] != (notifications := form_data_validation(customer)):
-                raise Exception(notifications, 400)
+                raise Exception("CUSTOMER_EXCEPTION", notifications, 400)
 
             return fn(customer)
 

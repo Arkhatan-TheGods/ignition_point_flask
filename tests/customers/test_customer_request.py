@@ -1,3 +1,4 @@
+from main.config import get_config
 from sqlite3 import Connection, Cursor, connect
 from re import match
 from pytest import mark, fixture
@@ -9,7 +10,15 @@ import json
 def setup() -> tuple:
 	# TODO: implementar versionamento /api/v1/
 
-	conn: Connection = connect("database")
+	config = get_config()
+	
+	data_base = config.get('file_db')
+	
+	if data_base is None:
+		raise Exception(
+			"Data base não identificado, verificar arquivo settings.yaml")
+
+	conn: Connection = connect(data_base)
 
 	cursor: Cursor = conn.cursor()
 
@@ -52,18 +61,18 @@ def setup() -> tuple:
            "birth_date": "04/01/1945",
            "address": "Conjunto Residencial 1 Condomínio 1 Bloco C, 568"}])
 
-
+# @mark.skip(reason="")
 def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
 	pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
 	assert match(pattner_name, setup[1][0]["name"])
 
+# @mark.skip(reason="")
 def test_post_customer_200(setup: tuple) -> None:
 
 	uri, customer = setup
 	
-
 	input_data = json.dumps(customer[1])
 
 	headers = {'Content-Type': 'application/json'}
@@ -86,4 +95,6 @@ def test_get_all_customers(setup) -> None:
 
 	response = get(uri)
 
-	assert [] != response
+	print(response.json())
+
+	assert 200 == response.status_code and [] != response

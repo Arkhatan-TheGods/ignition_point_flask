@@ -21,6 +21,8 @@ def customers_controller(controller: Callable) -> dict:
 
         customers = services["all"]()
 
+        print("customers", customers)
+
         return customers, 200
 
     return {'create': create,

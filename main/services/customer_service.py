@@ -8,9 +8,11 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
 
         print("costumer services>>>", costumer)
 
-        # row_id = customer_repository['add'](costumer)
+        customer_repository['add'](costumer)
 
-        # print("customer_service.add.row_id:_", row_id)
+    def get_all() -> list[tuple]:
+        
+        return customer_repository['all']()
 
     @check_paramter
     def get_by_cpf() -> tuple:
@@ -20,14 +22,6 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
         print("customer_service.get_by_cpf.result:_", cpf)
 
         return cpf,
-
-    def get_all() -> list[tuple]:
-
-        # result = customer_repository['all']()
-
-        # print("customer_service.get_all.result:_", result)
-
-        return []
 
     @check_data_entry
     def update(customer, id: int) -> None:
