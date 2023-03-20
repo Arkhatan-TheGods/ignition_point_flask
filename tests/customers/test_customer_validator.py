@@ -1,5 +1,5 @@
 from pytest import fixture
-from main.services.validators.customer_validator import costumer_validator
+from main.services.validators.customer_validator import customer_validator
 
 @fixture
 def setup() -> tuple:
@@ -12,7 +12,7 @@ def setup() -> tuple:
 
 def test_name_is_alpha(setup: tuple) -> None:
 
-    check_data, _ = costumer_validator()
+    check_data, _ = customer_validator()
 
     notifications = check_data(setup)
 

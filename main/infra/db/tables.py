@@ -7,7 +7,7 @@ def build_tables(data_base: str):
     try:
         conn = connect(data_base)
         cursor = conn.cursor()
-        cursor.execute(database_query.create_table_costumer())
+        cursor.execute(database_query.create_table_customer())
 
     except Exception as e:
         print(e)

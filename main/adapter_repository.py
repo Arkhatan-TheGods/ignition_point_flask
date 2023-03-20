@@ -10,19 +10,19 @@ from typing import TypedDict, Callable, Any
 
 def costumer(operation: dict) -> dict:
     def new_costumer(values: tuple) -> None:
-        query = database_query.new_costumer()
+        query = database_query.new_customer()
         return operation['execute'](query, values)
 
     def get_costumer_by_id(id: int) -> tuple[int, str, str, str, str]:
-        query = database_query.find_costumer_by_id()
+        query = database_query.find_customer_by_id()
         return operation['fetchone'](query, id)
 
     def get_costumer_by_name(name: str) -> tuple[int, str, str, str, str]:
-        query = database_query.find_costumer_by_name()
+        query = database_query.find_customer_by_name()
         return operation['fetchall'](query, name)
 
     def find_costumer_by_cpf(cpf: str) -> tuple:
-        query = database_query.find_costumer_by_cpf()
+        query = database_query.find_customer_by_cpf()
         return operation["fetchone"](query, cpf)
 
     def update_costumer_by_id(values: tuple) -> None:

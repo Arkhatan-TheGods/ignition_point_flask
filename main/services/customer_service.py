@@ -1,9 +1,9 @@
 
-def customer_service(customer_repository: dict, customer_validator: tuple) -> dict:
+def customer_service(customer_validator: dict, customer_repository: dict) -> dict:
 
-    check_data, check_paramter = customer_validator
+    check_data_entry, check_paramter = customer_validator
 
-    @check_data
+    @check_data_entry
     def add(costumer: tuple) -> None:
 
         row_id = customer_repository['add'](costumer)
@@ -27,7 +27,7 @@ def customer_service(customer_repository: dict, customer_validator: tuple) -> di
 
         return []
 
-    @check_data
+    @check_data_entry
     def update(customer, id: int) -> None:
         pass
         # result = costumer['get_costumer_by_id'](ID)

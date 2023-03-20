@@ -1,9 +1,9 @@
-from typing import Callable
+# from typing import Callable
 from re import match
 from datetime import datetime
 
 
-def costumer_validator() -> tuple:
+def customer_validator() -> tuple:
 
     def validate_date(date_text: str, mask: str) -> bool:
 
@@ -16,7 +16,7 @@ def costumer_validator() -> tuple:
         except ValueError:
             return False
 
-    def check_data(args: tuple) -> list:
+    def form_data_validation(args: tuple) -> list:
 
         name, cpf, birth_date, address = args
 
@@ -46,31 +46,31 @@ def costumer_validator() -> tuple:
 
         return notifications
 
-    def check_id():
-        return "check_id"
+    def id_validation(customer_id: int) -> str | None:
 
-    return check_data, check_id
+        return "Id cliente inválido" if customer_id == 0 else None
 
+    return form_data_validation, id_validation
 
-def check_costomer_decorator(validators: dict) -> dict:
+# def check_costomer_decorator(validators: dict) -> dict:
 
-    def check_create(func) -> Callable:
-        def wrapper() -> tuple:
+#     def check_create(func) -> Callable:
+#         def wrapper() -> tuple:
 
-            if len(notifys := validators["check_data"]()) >= 1:
-                raise Exception({"notifys": notifys, "status_code": 403})
+#             if len(notifys := validators["check_data"]()) >= 1:
+#                 raise Exception({"notifys": notifys, "status_code": 403})
 
-            return func(func)
-        return wrapper
+#             return func(func)
+#         return wrapper
 
-    def check_parameter(func) -> Callable:
-        def wrapper() -> tuple:
+#     def check_parameter(func) -> Callable:
+#         def wrapper() -> tuple:
 
-            if len(notifys := validators["check_id"]()) >= 1:
-                raise Exception(notifys)
+#             if len(notifys := validators["check_id"]()) >= 1:
+#                 raise Exception(notifys)
 
-            return func(func)
-        return wrapper
+#             return func(func)
+#         return wrapper
 
-    return {"check_create": check_create,
-            "check_parameter": check_parameter}
+#     return {"check_create": check_create,
+#             "check_parameter": check_parameter}

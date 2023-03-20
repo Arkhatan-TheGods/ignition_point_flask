@@ -5,8 +5,11 @@ from routes.register_customer_routes import register_customer_routes
 from routes.register_product_routes import register_product_routes
 
 from decorators.decorator import services_decorator
+
 from controllers.customers_controller import customers_controller
 from controllers.products_controller import products_controller
+
+
 
 def routing(app: Flask,
             request: Request, 
