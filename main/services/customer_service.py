@@ -1,5 +1,5 @@
 
-def customer_service(customer_validator: dict, customer_repository: dict) -> dict:
+def customer_service(customer_validator: tuple, customer_repository: dict) -> dict:
 
     check_data_entry, check_paramter = customer_validator
 
