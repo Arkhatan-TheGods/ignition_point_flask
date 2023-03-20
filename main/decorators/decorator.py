@@ -1,14 +1,12 @@
 from flask import Request, Response
 from typing import Callable, Any
 from infra.db.db_context import Connection, execute_connect
-from infra.dependency_injector import container
 from traceback import format_exc
 
 
-# def services_decorator(request: Request, get_service: Callable, get_method: Callable, data_base: str, type_service: str) -> Callable:
-def services_decorator(*args) -> Callable:
+def services_decorator(type_service: str, parameters: tuple) -> Callable:
 
-    request, check_params, get_service, data_base, type_service = args
+    request, check_params, get_service, data_base, container = parameters
 
     def decorator(func: Callable) -> Callable:
 

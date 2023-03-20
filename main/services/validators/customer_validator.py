@@ -1,4 +1,3 @@
-# from typing import Callable
 from re import match
 from datetime import datetime
 
@@ -51,26 +50,3 @@ def customer_validator() -> tuple:
         return "Id cliente inválido" if customer_id == 0 else None
 
     return form_data_validation, id_validation
-
-# def check_costomer_decorator(validators: dict) -> dict:
-
-#     def check_create(func) -> Callable:
-#         def wrapper() -> tuple:
-
-#             if len(notifys := validators["check_data"]()) >= 1:
-#                 raise Exception({"notifys": notifys, "status_code": 403})
-
-#             return func(func)
-#         return wrapper
-
-#     def check_parameter(func) -> Callable:
-#         def wrapper() -> tuple:
-
-#             if len(notifys := validators["check_id"]()) >= 1:
-#                 raise Exception(notifys)
-
-#             return func(func)
-#         return wrapper
-
-#     return {"check_create": check_create,
-#             "check_parameter": check_parameter}

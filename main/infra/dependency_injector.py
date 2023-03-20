@@ -10,9 +10,7 @@ from infra.repositories.repository import repository
 
 
 from decorators.customer_decorator import customer_decorator
-
 from services.validators.customer_validator import customer_validator
-
 
 
 def container(cursor: Cursor) -> tuple:
