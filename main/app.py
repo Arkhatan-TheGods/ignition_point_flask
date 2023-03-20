@@ -28,7 +28,8 @@ else:
 
     app = Flask(__name__)
 
-    routing(app, request, data_base)
+    # routing(app, request, data_base)
+    routing(app, data_base)
 
     if __name__ == "__main__":
         app.run(debug=True, use_reloader=False, host='127.0.0.1', port=8080)

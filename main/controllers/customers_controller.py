@@ -1,15 +1,21 @@
 from typing import Callable
+from flask import request
 
 def customers_controller(services: Callable) -> dict:
 
     @services
-    def create(*args, **kwargs) -> dict:
+    def create(**kwargs) -> dict:
 
-        customer = tuple(args[0]["data"].values())
+        if request.headers['Content-Type'] != 'application/json':
+            raise Exception({"message": 'Header Error', "status_code": 415})
 
-        row_id = kwargs["services"]["add"](customer)
+        customer = tuple(request.get_json())
 
-        print("customer_controller.create.row_id:_", row_id)
+        print("customer:", customer)
+
+        # customer = tuple(args[0]["data"].values())
+
+        # kwargs["services"]["add"](customer)
 
         return {"data": "Cliente cadastrado com sucesso", "status_code": 200}
 

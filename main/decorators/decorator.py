@@ -6,7 +6,8 @@ from traceback import format_exc
 
 def services_decorator(type_service: str, parameters: tuple) -> Callable:
 
-    request, check_params, get_service, data_base, container = parameters
+    # request, check_params, get_service, data_base, container = parameters
+    get_service, data_base, container = parameters
 
     def decorator(func: Callable) -> Callable:
 
@@ -20,8 +21,9 @@ def services_decorator(type_service: str, parameters: tuple) -> Callable:
 
                 conn = execute_connect(data_base)
 
-                result = func(check_params(request),
-                                services=get_service(container(conn.cursor()), type_service))
+                # result = func(check_params(request),
+                #                 services=get_service(container(conn.cursor()), type_service))
+                result = func(services=get_service(container(conn.cursor()), type_service))
 
             except Exception:
                 # TODO: Criar funcionalidade para armazenar log de erros
