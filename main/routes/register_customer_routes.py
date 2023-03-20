@@ -2,9 +2,9 @@ from flask import Flask
 
 def register_customer_routes(app: Flask, controller: dict) -> None:
 
-    app.add_url_rule('/costumers/', "create_costumer", controller["create"], methods=['POST'])
+    app.add_url_rule('/customers/', "create_customers", controller["create"], methods=['POST'])
 
-    app.add_url_rule('/costumers/', "get_costumers", controller["all"], methods=['GET'])
+    app.add_url_rule('/customers/', "get_customers", controller["all"], methods=['GET'])
 
     # POST http://127.0.0.1:8080/costumers        
    
