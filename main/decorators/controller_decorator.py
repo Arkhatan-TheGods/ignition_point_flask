@@ -30,6 +30,7 @@ def controller_decorator(type_service: str, parameters: tuple) -> Callable:
                 # TODO: Criar funcionalidade para armazenar log de erros
                 # print(format_exc())
                 if  type(ex.args) == tuple:
+
                     message_error = ex.args[0]
                     status_code = ex.args[1]
                 else:
@@ -45,7 +46,7 @@ def controller_decorator(type_service: str, parameters: tuple) -> Callable:
                     conn.close()
 
                 return Response(response=message_error if message_error else result[0],
-                                status=status_code if status_code else result[0],
+                                status=status_code if status_code else result[1],
                                 mimetype='application/json')
 
         return wrapper

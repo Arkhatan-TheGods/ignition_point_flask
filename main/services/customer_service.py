@@ -23,9 +23,9 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
 
     def get_all() -> list[tuple]:
 
-        result = customer_repository['all']()
+        # result = customer_repository['all']()
 
-        print("customer_service.get_all.result:_", result)
+        # print("customer_service.get_all.result:_", result)
 
         return []
 

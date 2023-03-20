@@ -14,10 +14,10 @@ from services.validators.customer_validator import customer_validator
 
 
 def container(cursor: Cursor) -> tuple:
-    print("CHEGANDO AQUI 1", cursor)
+
     customer = customer_service(customer_decorator(customer_validator()),
                                 customer_repository(repository(cursor)))
 
     products = product_service(products_repository(repository(cursor)))
-    print("CHEGANDO AQUI 2", customer, products)
+
     return customer, products
