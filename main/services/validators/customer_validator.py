@@ -20,7 +20,7 @@ def customer_validator() -> tuple:
         name, cpf, birth_date, address = args
 
         notifications = []
-        pattner_name = '^[a-zA-Z0-9\\s]+$'
+        pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
         pattner_cpf = "\\d{3}\\.\\d{3}(\\.\\d{3}\\-\\d{2})"
 
         print(match(pattner_cpf, cpf))
