@@ -2,7 +2,7 @@ def query_tables() -> str:
 
     return """
             BEGIN;
-            CREATE TABLE IF NOT EXISTS COSTUMERS(
+            CREATE TABLE IF NOT EXISTS CUSTOMERS(
                 ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 NAME TEXT NOT NULL,
                 CPF TEXT NOT NULL UNIQUE,

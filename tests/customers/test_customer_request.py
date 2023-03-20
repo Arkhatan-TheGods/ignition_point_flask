@@ -7,7 +7,7 @@ import json
 @fixture
 def setup():
 	# TODO: implementar versionamento /api/v1/
-	return 'http://127.0.0.1:8080/costumers/', {
+	return 'http://127.0.0.1:8080/customers/', {
 		"name": "Tomás Kaique Assunção",
 		"cpf": "942.554.492-10",
 		"birth_date": "27/01/2002",
@@ -15,25 +15,25 @@ def setup():
 	}
 
 
-def test_post_costumer_200(setup: tuple):
+def test_post_customer_200(setup: tuple):
 
-	uri_consumer, consumer = setup
+	uri, customer = setup
 
-	input_data = json.dumps(consumer)
+	input_data = json.dumps(customer)
 
 	headers = {'Content-Type': 'application/json'}
 
-	response = post(uri_consumer, input_data, headers=headers)
+	response = post(uri, input_data, headers=headers)
 
 	assert 200 == response.status_code
 
 
 # @mark.skip(reason="reason for skipping the test case")
-def test_get_all_costumers(setup):
+def test_get_all_customers(setup):
 
-	uri_consumer, _ = setup
+	uri, _ = setup
 
-	response = get(uri_consumer)
+	response = get(uri)
 
 	print("response:", response)
 

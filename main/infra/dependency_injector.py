@@ -1,17 +1,23 @@
 from sqlite3 import Cursor
 
-from services.costumer_service import costumer_service
+from main.services.customer_service import customer_service
 from services.product_service import product_service
 
-from infra.repositories.costumer_repository import costumer_repository
+from main.infra.repositories.customer_repository import customer_repository
 from infra.repositories.products_repository import products_repository
 
 from infra.repositories.repository import repository
 
 
+from decorators.customer_decorator import customer_decorator
+from services.validators.customer_validator import customer_validator
+
+
 def container(cursor: Cursor) -> tuple:
 
-    costumer = costumer_service(costumer_repository(repository(cursor)))
+    customer = customer_service(customer_decorator(customer_validator()),
+                                customer_repository(repository(cursor)))
+
     products = product_service(products_repository(repository(cursor)))
 
-    return costumer, products
+    return customer, products
