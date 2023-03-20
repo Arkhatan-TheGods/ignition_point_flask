@@ -85,13 +85,15 @@ def test_post_customer_200(setup: tuple) -> None:
 # @mark.skip(reason="")
 def test_get_all_customers(setup) -> None:
 
-	uri, customer = setup
+	uri, customers = setup
 
-	input_data = json.dumps(customer[1])
+	for customer in customers:
 
-	headers = {'Content-Type': 'application/json'}
+		input_data = json.dumps(customer)
 
-	post(uri, input_data, headers=headers)
+		headers = {'Content-Type': 'application/json'}
+
+		post(uri, input_data, headers=headers)
 
 	response = get(uri)
 

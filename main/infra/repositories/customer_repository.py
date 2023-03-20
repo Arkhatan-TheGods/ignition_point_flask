@@ -16,11 +16,11 @@ def customer_repository(repository: dict) -> dict:
              FROM CUSTOMERS WHERE ID = :ID;", customer_id)
 
     def get_all() -> list[tuple]:
-        return repository['fetchall']("SELECT ID, \
-                                 NAME, \
-                                 CPF, \
-                                 BIRTH_DATE, \
-                                 ADDRESS FROM CUSTOMERS;")
+        return repository['all']("SELECT ID, \
+                                         NAME, \
+                                         CPF, \
+                                         BIRTH_DATE, \
+                                         ADDRESS FROM CUSTOMERS;")
 
     def get_by_name(name: str) -> tuple:
         
