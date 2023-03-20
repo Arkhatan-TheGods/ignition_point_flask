@@ -5,6 +5,23 @@ from infra.dependency_injector import container
 from traceback import format_exc
 
 
+def check_form_data(request: Request, check_params):
+
+    def decorator(fn):
+
+        def wrapper(*args, **kwargs):
+
+            try:
+                if check_params(request):
+                    return fn(*args, **kwargs)
+            except Exception:
+                return {}
+
+        return wrapper
+    return decorator
+
+
+
 # def services_decorator(request: Request, get_service: Callable, get_method: Callable, data_base: str, type_service: str) -> Callable:
 def services_decorator(*args) -> Callable:
 

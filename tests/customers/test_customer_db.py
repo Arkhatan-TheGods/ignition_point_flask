@@ -3,20 +3,19 @@ from typing import Iterable
 from main.infra.db.db_context import Connection, Cursor, execute_connect
 from main.infra.db.query_tables import query_tables
 
-
-@fixture(scope="function")
+@fixture
 def setup() -> Iterable:
 
     # Arrange
     conn: Connection = execute_connect(":memory:")
     cursor: Cursor = conn.cursor()
 
-    costumer = ("Tomás Kaique Assunção",
+    customer = ("Tomás Kaique Assunção",
                 "942.554.492-10",
                 "27/01/2002",
                 "Quadra 12 Conjunto F, 311")
 
-    yield conn, cursor, costumer
+    yield conn, cursor, customer
 
     # Cleanup
     conn.close()
@@ -24,86 +23,86 @@ def setup() -> Iterable:
 # @mark.skip(reason="")
 
 
-def test_check_create_and_find_costumer_id(setup: tuple[Connection, Cursor, tuple]):
+def test_check_create_and_find_customer_id(setup: tuple[Connection, Cursor, tuple]):
 
-    conn, cursor, costumer = setup
+    conn, cursor, customer = setup
 
     # Act
     cursor.executescript(query_tables())
 
     cursor.execute("""
-    INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
+    INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
     VALUES ($NAME, $CPF, $BIRTH_DATE, $ADDRESS)
-    """, costumer)
+    """, customer)
 
     conn.commit()
 
-    result = cursor.execute("SELECT ID FROM COSTUMERS WHERE ID=$ID",
+    result = cursor.execute("SELECT ID FROM CUSTOMERS WHERE ID=$ID",
                             (cursor.lastrowid,))
 
     # Assert
     assert (cursor.lastrowid,) == result.fetchone()
 
 
-def test_check_edit_costumer_id(setup: tuple[Connection, Cursor, tuple]):
+def test_check_edit_customer_id(setup: tuple[Connection, Cursor, tuple]):
 
-    conn, cursor, costumer = setup
+    conn, cursor, customer = setup
 
     # Act
     cursor.executescript(query_tables())
 
     cursor.execute("""
-    INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
+    INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
     VALUES ($NAME, $CPF, $BIRTH_DATE, $ADDRESS)
-    """, costumer)
+    """, customer)
 
     conn.commit()
 
-    costumer_edit = ("Tomás Kaique",
+    customer_edit = ("Tomás Kaique",
                      "104.018.975-08",
                      "27/05/2002",
                      "Quadra QNL 4, 248",
                      cursor.lastrowid)
 
     query_edit = """
-        UPDATE COSTUMERS 
+        UPDATE CUSTOMERS 
         SET NAME = $NAME,
         CPF = $CPF,
         BIRTH_DATE = $BIRTH_DATE,
         ADDRESS = $ADDRESS
         WHERE ID = $ID;
     """
-    cursor.execute(query_edit, costumer_edit)
+    cursor.execute(query_edit, customer_edit)
 
     conn.commit()
 
     result = cursor.execute(
         """SELECT NAME, CPF, BIRTH_DATE, ADDRESS, ID 
-        FROM COSTUMERS 
+        FROM CUSTOMERS 
         WHERE ID = $ID;""", (cursor.lastrowid, ))
 
     # Assert
-    assert costumer_edit == result.fetchone()
+    assert customer_edit == result.fetchone()
 
 
-def test_check_remove_costumer_by_id(setup: tuple[Connection, Cursor, tuple]):
+def test_check_remove_customer_by_id(setup: tuple[Connection, Cursor, tuple]):
 
-    conn, cursor, costumer = setup
+    conn, cursor, customer = setup
 
     # Act
     cursor.executescript(query_tables())
 
     cursor.execute("""
-    INSERT INTO COSTUMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
+    INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
     VALUES ($NAME, $CPF, $BIRTH_DATE, $ADDRESS);
-    """, costumer)
+    """, customer)
 
-    cursor.execute("DELETE FROM COSTUMERS WHERE ID=$ID;",
+    cursor.execute("DELETE FROM CUSTOMERS WHERE ID=$ID;",
                    (cursor.lastrowid,))
 
     conn.commit()
 
-    result = cursor.execute("SELECT ID FROM COSTUMERS WHERE ID=$ID;",
+    result = cursor.execute("SELECT ID FROM CUSTOMERS WHERE ID=$ID;",
                             (cursor.lastrowid,))
 
     # Assert

@@ -6,7 +6,8 @@ from infra.db.query_tables import query_tables
 from config import get_config
 from traceback import format_exc
 
-def check_params(request: Request) -> dict | None:
+
+def get_params(request: Request) -> dict | None:
 
     match request.method.upper():
 
@@ -60,7 +61,7 @@ else:
 
     app = Flask(__name__)
 
-    routing(app, request, check_params, get_service, data_base)
+    routing(app, request, get_params, get_service, data_base)
 
     if __name__ == "__main__":
         app.run(debug=True, use_reloader=False, host='127.0.0.1', port=8080)
