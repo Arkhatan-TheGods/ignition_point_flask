@@ -7,6 +7,8 @@ from decorators.decorator import services_decorator
 
 from controllers.customers_controller import customers_controller
 from controllers.products_controller import products_controller
+
+from services.service import get_service
 from infra.dependency_injector import container
 
 def get_params(request: Request) -> dict | None:
@@ -27,19 +29,6 @@ def get_params(request: Request) -> dict | None:
 
     return params
 
-def get_service(container: tuple, type_service: str) -> dict | None:
-
-        costumer, products = container
-
-        match type_service:
-            case 'COSTUMER':
-                service = costumer
-            case 'PRODUCTS':
-                service = products
-            case _:
-                service: dict | None = {}
-
-        return service
 
 def routing(app: Flask,
             request: Request, 
