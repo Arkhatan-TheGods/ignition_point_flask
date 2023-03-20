@@ -1,7 +1,7 @@
 from typing import Callable
 
 
-def customer_decorator(validators: tuple) -> dict:
+def customer_decorator(validators: tuple) -> tuple:
 
     form_data_validation, id_validation = validators
 
@@ -29,5 +29,4 @@ def customer_decorator(validators: tuple) -> dict:
 
         return wrapper
 
-    return {"check_data_entry": check_data_entry,
-            "check_parameter_id": check_parameter_id}
+    return check_data_entry, check_parameter_id
