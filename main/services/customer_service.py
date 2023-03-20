@@ -1,14 +1,18 @@
 
-def customer_service(customer_validator: dict, customer_repository: dict) -> dict:
+def customer_service(customer_validator: tuple, customer_repository: dict) -> dict:
 
     check_data_entry, check_paramter = customer_validator
 
     @check_data_entry
     def add(costumer: tuple) -> None:
 
-        row_id = customer_repository['add'](costumer)
+        print("costumer services>>>", costumer)
 
-        print("customer_service.add.row_id:_", row_id)
+        customer_repository['add'](costumer)
+
+    def get_all() -> list[tuple]:
+        
+        return customer_repository['all']()
 
     @check_paramter
     def get_by_cpf() -> tuple:
@@ -18,14 +22,6 @@ def customer_service(customer_validator: dict, customer_repository: dict) -> dic
         print("customer_service.get_by_cpf.result:_", cpf)
 
         return cpf,
-
-    def get_all() -> list[tuple]:
-
-        result = customer_repository['all']()
-
-        print("customer_service.get_all.result:_", result)
-
-        return []
 
     @check_data_entry
     def update(customer, id: int) -> None:

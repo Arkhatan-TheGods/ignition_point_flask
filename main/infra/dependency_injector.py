@@ -1,9 +1,9 @@
 from sqlite3 import Cursor
 
-from main.services.customer_service import customer_service
+from services.customer_service import customer_service
 from services.product_service import product_service
 
-from main.infra.repositories.customer_repository import customer_repository
+from infra.repositories.customer_repository import customer_repository
 from infra.repositories.products_repository import products_repository
 
 from infra.repositories.repository import repository
