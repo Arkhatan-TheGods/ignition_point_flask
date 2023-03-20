@@ -1,32 +1,27 @@
 from typing import Callable
 from flask import request
 
-def customers_controller(services: Callable) -> dict:
 
-    @services
-    def create(**kwargs) -> dict:
+def customers_controller(controller: Callable) -> dict:
+
+    @controller
+    def create(services: dict) -> tuple:
 
         if request.headers['Content-Type'] != 'application/json':
-            raise Exception({"message": 'Header Error', "status_code": 415})
+            raise Exception('Header Error', 415)
 
-        customer = tuple(request.get_json())
+        customer = tuple(request.get_json().values())
 
-        print("customer:", customer)
+        services["add"](customer)
 
-        # customer = tuple(args[0]["data"].values())
+        return "Cliente cadastrado com sucesso", 200
 
-        # kwargs["services"]["add"](customer)
+    @controller
+    def get_customer(services: dict) -> tuple:
 
-        return {"data": "Cliente cadastrado com sucesso", "status_code": 200}
+        customers = services["all"]()
 
-    @services
-    def get_customer(**kwargs) -> dict:
-
-        customers = kwargs["services"]["all"]()
-
-        print("customer_controller.get_customer.costumers:_", customers)
-
-        return {"data": customers, "status_code": 200}
+        return customers, 200
 
     return {'create': create,
             'all': get_customer}

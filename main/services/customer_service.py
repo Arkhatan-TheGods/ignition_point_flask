@@ -6,9 +6,11 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
     @check_data_entry
     def add(costumer: tuple) -> None:
 
-        row_id = customer_repository['add'](costumer)
+        print("costumer services>>>", costumer)
 
-        print("customer_service.add.row_id:_", row_id)
+        # row_id = customer_repository['add'](costumer)
+
+        # print("customer_service.add.row_id:_", row_id)
 
     @check_paramter
     def get_by_cpf() -> tuple:

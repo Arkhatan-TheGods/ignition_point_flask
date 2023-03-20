@@ -28,7 +28,6 @@ else:
 
     app = Flask(__name__)
 
-    # routing(app, request, data_base)
     routing(app, data_base)
 
     if __name__ == "__main__":

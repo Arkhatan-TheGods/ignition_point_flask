@@ -1,10 +1,10 @@
 def get_service(container: tuple, type_service: str) -> dict | None:
 
-    costumer, products = container
+    customer, products = container
 
     match type_service:
-        case 'COSTUMER':
-            service = costumer
+        case 'CUSTOMER':
+            service = customer
         case 'PRODUCTS':
             service = products
         case _:
