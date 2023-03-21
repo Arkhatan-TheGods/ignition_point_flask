@@ -1,6 +1,6 @@
 from typing import Callable
 from flask import request
-
+from utils.enum_utils import TypeException
 
 def customers_controller(controller: Callable) -> dict:
 
@@ -8,7 +8,8 @@ def customers_controller(controller: Callable) -> dict:
     def create(services: dict) -> tuple:
 
         if request.headers['Content-Type'] != 'application/json':
-            raise Exception('Header Error', 415)
+            raise Exception(TypeException.CUSTOMER,
+                            {"error": 'Header Error'}, 415)
 
         customer = tuple(request.get_json().values())
 

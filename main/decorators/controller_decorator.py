@@ -1,7 +1,7 @@
 from flask import Response, json
 from typing import Callable
 from infra.db.db_context import Connection, execute_connect
-from utils.enum_utils import ServiceException
+from utils.enum_utils import TypeException
 from traceback import format_exc
 
 
@@ -32,8 +32,8 @@ def controller_decorator(type_service: str, parameters: tuple) -> Callable:
             except Exception as ex:
                 # TODO: Criar funcionalidade para armazenar log de erros
 
-                if ex.args[0] in [ServiceException.CUSTOMER,
-                                  ServiceException.PRODUCT]:
+                if ex.args[0] in [TypeException.CUSTOMER,
+                                  TypeException.PRODUCT]:
                     message_error = ex.args[1]
                     status_code = ex.args[2]
                 else:

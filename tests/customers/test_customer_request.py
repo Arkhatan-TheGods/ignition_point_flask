@@ -5,7 +5,7 @@ from pytest import mark, fixture
 from requests import get, post
 from main.infra.db.query_tables import drop_tables, create_tables
 from main.infra.db.execute_query import execute_query
-from json import loads, dumps
+from json import dumps
 
 
 @fixture
@@ -20,7 +20,7 @@ def setup() -> tuple:
 		raise Exception(
 			"Data base não identificado, verificar arquivo settings.yaml")
 
-	conn: Connection = connect(data_base)
+	conn = connect(data_base)
 
 	cursor = conn.cursor()
 
@@ -31,18 +31,10 @@ def setup() -> tuple:
 	conn.close()
 
 	return ('http://127.0.0.1:8080/customers/',
-         [{"name": "Yago André Almada",
-           "cpf": "942.554.492-10",
-           "birth_date": "27/01/2002",
-           "address": "Quadra 12 Conjunto F, 311"},
-          {"name": "Maitê Daiane da Mata",
-           "cpf": "648.487.491-31",
-           "birth_date": "23/01/1969",
-           "address": "Rua Manoel Severino da Silva, 303"},
-          {"name": "Nicolas Danilo Leonardo da Rocha",
-           "cpf": "219.581.745-30",
-           "birth_date": "04/01/1945",
-           "address": "Conjunto Residencial 1 Condomínio 1 Bloco C, 568"}])
+         {"name": "Yago André Almada",
+          "cpf": "942.554.492-10",
+          "birth_date": "27/01/2002",
+          "address": "Quadra 12 Conjunto F, 311"})
 
 @fixture
 def setup_customers():
@@ -55,7 +47,7 @@ def setup_customers():
 		raise Exception(
 			"Data base não identificado, verificar arquivo settings.yaml")
 
-	conn: Connection = connect(data_base)
+	conn = connect(data_base)
 
 	cursor = conn.cursor()
 
@@ -87,15 +79,15 @@ def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
 	pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
-	assert match(pattner_name, setup[1][0]["name"])
+	assert match(pattner_name, setup[1]["name"])
 
 
 # @mark.skip(reason="")
 def test_post_customer_200(setup: tuple) -> None:
 
-	uri, customers = setup
+	uri, customer = setup
 
-	input_data = dumps(customers[1])
+	input_data = dumps(customer)
 
 	headers = {'Content-Type': 'application/json'}
 
@@ -114,9 +106,9 @@ def test_get_all_customers(setup_customers) -> None:
 # @mark.skip(reason="")
 def test_get_by_customer_id(setup) -> None:
 
-	uri, customers = setup
+	uri, customer = setup
 
-	input_data = dumps(customers[1])
+	input_data = dumps(customer)
 
 	headers = {'Content-Type': 'application/json'}
 
@@ -130,16 +122,16 @@ def test_get_by_customer_id(setup) -> None:
 @mark.skip(reason="")
 def test_get_customer_by_cpf(setup) -> None:
 
-	uri, customers = setup
+	uri, customer = setup
 
-	input_data = dumps(customers[1])
+	input_data = dumps(customer[1])
 
 	headers = {'Content-Type': 'application/json'}
 
 	post(uri, input_data, headers=headers)
 
-	response = get(f'{uri}{customers[1][1]}')
+	response = get(f'{uri}{customer[1]}')
 
-	print("response:>>>>>>>>>>", response)
+	print("response:>>>>>>>>>>", response.json().get("customer"))
 
-	# assert 200 == response.status_code and () != response
+	assert 200 == response.status_code and response.json().get("customer")

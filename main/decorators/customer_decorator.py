@@ -1,5 +1,5 @@
 from typing import Callable
-from utils.enum_utils import ServiceException
+from utils.enum_utils import TypeException
 
 
 def customer_decorator(validators: tuple) -> tuple:
@@ -11,7 +11,7 @@ def customer_decorator(validators: tuple) -> tuple:
         def wrapper(customer: tuple) -> tuple:
 
             if [] != (validation_errors := form_data_validation(customer)):
-                raise Exception(ServiceException.CUSTOMER,
+                raise Exception(TypeException.CUSTOMER,
                                 {"errors": validation_errors}, 400)
 
             return fn(customer)
@@ -23,7 +23,7 @@ def customer_decorator(validators: tuple) -> tuple:
         def wrapper(customer_id: int) -> tuple:
 
             if (validatio_error := id_validation(customer_id)):
-                raise Exception(ServiceException.CUSTOMER,
+                raise Exception(TypeException.CUSTOMER,
                                 {"error": validatio_error}, 400)
 
             return fn(customer_id)

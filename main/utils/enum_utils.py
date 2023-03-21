@@ -1,6 +1,5 @@
 from enum import Enum
 
-
-class ServiceException(Enum):
+class TypeException(Enum):
     CUSTOMER = 1
     PRODUCT = 2
