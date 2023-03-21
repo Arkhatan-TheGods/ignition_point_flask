@@ -61,14 +61,14 @@ def setup() -> tuple:
            "birth_date": "04/01/1945",
            "address": "Conjunto Residencial 1 Condomínio 1 Bloco C, 568"}])
 
-# @mark.skip(reason="")
+@mark.skip(reason="")
 def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
 	pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
 	assert match(pattner_name, setup[1][0]["name"])
 
-# @mark.skip(reason="")
+@mark.skip(reason="")
 def test_post_customer_200(setup: tuple) -> None:
 
 	uri, customer = setup
@@ -82,7 +82,7 @@ def test_post_customer_200(setup: tuple) -> None:
 	assert 200 == response.status_code
 
 
-# @mark.skip(reason="")
+@mark.skip(reason="")
 def test_get_all_customers(setup) -> None:
 
 	uri, customers = setup
@@ -100,3 +100,37 @@ def test_get_all_customers(setup) -> None:
 	print(response.json())
 
 	assert 200 == response.status_code and [] != response
+
+# @mark.skip(reason="")
+def test_get_by_customer_id(setup) -> None:
+
+	uri, customers = setup
+	
+	input_data = json.dumps(customers[1])
+
+	headers = {'Content-Type': 'application/json'}
+
+	post(uri, input_data, headers=headers)
+
+	response = get(f'{uri}{1}')
+
+	print("response:>>>>>>>>>>", json.loads(response.content))
+
+	assert 200 == response.status_code and () != response
+
+@mark.skip(reason="")
+def test_get_customer_by_cpf(setup) -> None:
+
+	uri, customers = setup
+	
+	input_data = json.dumps(customers[1])
+
+	headers = {'Content-Type': 'application/json'}
+
+	post(uri, input_data, headers=headers)
+
+	response = get(f'{uri}{customers[1][1]}')
+
+	print("response:>>>>>>>>>>", response)
+
+	# assert 200 == response.status_code and () != response
