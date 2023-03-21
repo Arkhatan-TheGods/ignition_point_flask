@@ -17,13 +17,21 @@ def customers_controller(controller: Callable) -> dict:
         return "Cliente cadastrado com sucesso", 200
 
     @controller
-    def get_customer(services: dict) -> tuple:
+    def get_customers(services: dict) -> tuple:
 
-        customers = services["all"]()
+        return {"customers": services["all"]()}, 200
 
-        print("customers", customers)
+    @controller
+    def get_by_id(services: dict, **kwargs: dict) -> tuple:
 
-        return customers, 200
+        return {"customer": services["get_by_id"]((kwargs.get("customer_id"),))}, 200
+
+    @controller
+    def get_by_cpf(services: dict, **kwargs: dict) -> tuple:
+
+        return services["get_by_id"]((kwargs.get("cpf"),)), 200
 
     return {'create': create,
-            'all': get_customer}
+            'all': get_customers,
+            'get_by_id': get_by_id,
+            'get_by_cpf': get_by_cpf}

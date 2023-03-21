@@ -1,8 +1,8 @@
 from flask import Flask, request
 from routes.routing import routing
 from infra.db.db_context import Connection, execute_connect
-from infra.db.create_tables import create_tables
-from infra.db.query_tables import query_tables
+from infra.db.execute_query import execute_query
+from infra.db.query_tables import create_tables
 from config import get_config
 from traceback import format_exc
 
@@ -19,7 +19,7 @@ try:
 
     conn = execute_connect(data_base)
 
-    create_tables(conn, query_tables())
+    execute_query(conn.cursor(), create_tables())
 
 except Exception:
     # TODO: Criar funcionalidade para armazenar log de erros
