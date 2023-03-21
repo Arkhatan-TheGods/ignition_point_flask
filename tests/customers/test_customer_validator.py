@@ -11,8 +11,8 @@ def setup() -> tuple:
 
 
 def test_name_is_alpha(setup: tuple) -> None:
-
-    check_data, _ = customer_validator()
+    print(setup)
+    check_data, check_id, check_cpf = customer_validator()
 
     notifications = check_data(setup)
 
