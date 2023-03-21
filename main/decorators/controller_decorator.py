@@ -27,8 +27,6 @@ def controller_decorator(type_service: str, parameters: tuple) -> Callable:
 
                 result = func(get_service(container(conn.cursor()), type_service), **kwargs)
 
-                print("result", result)
-
             except Exception as ex:
                 # TODO: Criar funcionalidade para armazenar log de erros
 

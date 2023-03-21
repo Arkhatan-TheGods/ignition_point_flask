@@ -21,10 +21,10 @@ def customer_repository(repository: dict) -> dict:
         return repository["fetchone"]("SELECT ID, NAME, CPF, BIRTH_DATE, \
                                       ADDRESS FROM CUSTOMERS WHERE CPF = :CPF;", cpf)
 
-    def get_by_name(name: str) -> tuple:
-        
+    def get_by_name(name: tuple) -> tuple:
+
         return repository['fetchall']("SELECT ID, NAME, CPF, BIRTH_DATE, ADDRESS \
-                                      FROM CUSTOMERS WHERE LOWER(NAME) = '%:NAME' AND LIMIT 10;", name)
+                                      FROM CUSTOMERS WHERE LOWER(NAME) LIKE :NAME LIMIT 5;", (f"{name[0]}%", ))
 
 
     def edit(values: tuple) -> None:
@@ -37,7 +37,7 @@ def customer_repository(repository: dict) -> dict:
     return {'add': add,
             'all': get_all,
             'get_by_id': get_by_id,
-            'get_by_name': get_by_name,
             'get_by_cpf': get_by_cpf,
+            'get_by_name': get_by_name,
             'edit': edit,
             'remove': remove}

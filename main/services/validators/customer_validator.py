@@ -18,16 +18,14 @@ def customer_validator() -> tuple:
         except ValueError:
             return False
 
-    def input_data_validation(args: tuple) -> list:
+    def input_data_validation(data: tuple) -> list:
 
-        name, cpf, birth_date, address = args
+        name, cpf, birth_date, address = data
 
         notifications = []
 
-        print(match(PATTNER_CPF, cpf))
-
         if len(name) < 1:
-            notifications.append("Campo name não informado")
+            notifications.append("Campo nome não informado")
         else:
             if match(PATTNER_NAME, name) is None:
                 notifications.append("Campo nome inválido")
@@ -46,12 +44,27 @@ def customer_validator() -> tuple:
 
         return notifications
 
-    def validation_by_id(customer_id: int) -> str | None:
+    def validation_by_id(param_id: int) -> str | None:
 
-        return "Id cliente inválido" if customer_id == 0 else None
+        return "Id inválido" if param_id == 0 else None
 
     def validation_by_CPF(cpf: str) -> str | None:
         return "Formato inválido para campo cpf" \
             if match(PATTNER_CPF, cpf) is None else None
 
-    return input_data_validation, validation_by_id, validation_by_CPF
+    def validation_by_name(name: str) -> list:
+
+        notifications = []
+
+        if len(name.strip()) < 3:
+            notifications.append("Campo nome deve possuir mínimo de 3 caracteres")
+        else:
+            if match(PATTNER_NAME, name) is None:
+                notifications.append("Campo nome inválido")
+
+        return notifications
+
+    return (input_data_validation, 
+            validation_by_id, 
+            validation_by_CPF, 
+            validation_by_name)

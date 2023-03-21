@@ -10,6 +10,11 @@ def register_customer_routes(app: Flask, controller: dict) -> None:
 
     app.add_url_rule('/customers/<string:cpf>', "get_customer_by_cpf", controller["get_by_cpf"], methods=['GET'])
 
+    app.add_url_rule('/customers/<string:name>/name', "get_customer_by_name", controller["get_by_name"], methods=['GET'])
+
+
+
+
     # POST http://127.0.0.1:8080/costumers        
    
     # GET http://127.0.0.1:8080/costumers/<int:id>
