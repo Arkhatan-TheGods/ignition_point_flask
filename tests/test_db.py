@@ -1,7 +1,7 @@
 from pytest import fixture, mark
 from typing import Iterable
 from main.infra.db.db_context import Connection, Cursor, execute_connect
-from main.infra.db.query_tables import query_tables
+from main.infra.db.query_tables import create_tables
 
 
 @fixture(scope="function")
@@ -21,13 +21,13 @@ def setup() -> Iterable:
     # Cleanup
     conn.close()
 
-@mark.parametrize("table", ["COSTUMERS", "PRODUCTS"])
+@mark.parametrize("table", ["CUSTOMERS", "PRODUCTS"])
 def test_create_tables_costumers_and_products(setup: tuple[Connection, Cursor, str], table: str):
 
     _, cursor, query = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     table_name = cursor.execute(query.replace(
         "{TABLE}", table)).fetchone()

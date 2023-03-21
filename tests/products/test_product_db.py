@@ -1,7 +1,7 @@
 from pytest import fixture, mark
 from typing import Iterable
 from main.infra.db.db_context import Connection, Cursor, execute_connect
-from main.infra.db.query_tables import query_tables
+from main.infra.db.query_tables import create_tables
 
 
 @fixture(scope="function")
@@ -16,12 +16,13 @@ def setup() -> Iterable:
     # Cleanup
     conn.close()
 
+
 def test_check_create_and_find_product_id(setup: tuple[Connection, Cursor]):
 
     conn, cursor = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME)",
                    ("Black Coffe",))
@@ -34,12 +35,13 @@ def test_check_create_and_find_product_id(setup: tuple[Connection, Cursor]):
     # Assert
     assert (cursor.lastrowid,) == result.fetchone()
 
+
 def test_check_edit_product_by_id(setup: tuple[Connection, Cursor]):
 
     conn, cursor = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME);",
                    ("Black Coffe",))
@@ -63,7 +65,7 @@ def test_check_remove_product_by_id(setup: tuple[Connection, Cursor]):
     conn, cursor = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("INSERT INTO PRODUCTS(NAME) VALUES ($NAME);",
                    ("Black Coffe",))

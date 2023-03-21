@@ -12,8 +12,8 @@ def setup() -> tuple:
 
 def test_name_is_alpha(setup: tuple) -> None:
     print(setup)
-    check_data, check_id, check_cpf = customer_validator()
+    input_data_validation, validation_by_id, validation_by_CPF, validation_by_name = customer_validator()
 
-    notifications = check_data(setup)
+    notifications = input_data_validation(setup)
 
     assert [] == notifications
