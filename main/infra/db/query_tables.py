@@ -1,5 +1,10 @@
-def query_tables() -> str:
+def drop_tables() -> str:
+    return "BEGIN;\
+			DROP TABLE IF EXISTS CUSTOMERS;\
+			DROP TABLE IF EXISTS PRODUCTS;\
+				COMMIT;"
 
+def create_tables() -> str:
     return """
             BEGIN;
             CREATE TABLE IF NOT EXISTS CUSTOMERS(

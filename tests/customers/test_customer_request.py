@@ -1,9 +1,11 @@
 from main.config import get_config
-from sqlite3 import Connection, Cursor, connect
+from sqlite3 import Connection, connect
 from re import match
 from pytest import mark, fixture
 from requests import get, post
-import json
+from main.infra.db.query_tables import drop_tables, create_tables
+from main.infra.db.execute_query import execute_query
+from json import loads, dumps
 
 
 @fixture
@@ -11,39 +13,20 @@ def setup() -> tuple:
 	# TODO: implementar versionamento /api/v1/
 
 	config = get_config()
-	
+
 	data_base = config.get('file_db')
-	
+
 	if data_base is None:
 		raise Exception(
 			"Data base não identificado, verificar arquivo settings.yaml")
 
 	conn: Connection = connect(data_base)
 
-	cursor: Cursor = conn.cursor()
+	cursor = conn.cursor()
 
-	cursor.executescript("""
-	BEGIN;
-		
-		DROP TABLE IF EXISTS CUSTOMERS;
-		DROP TABLE IF EXISTS PRODUCTS;
-		
-		CREATE TABLE IF NOT EXISTS CUSTOMERS(
-                ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                NAME TEXT NOT NULL,
-                CPF TEXT NOT NULL UNIQUE,
-                BIRTH_DATE TEXT NOT NULL,
-                ADDRESS TEXT NOT NULL,
-                CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+	execute_query(cursor, drop_tables())
 
-            CREATE TABLE IF NOT EXISTS PRODUCTS(
-                ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                NAME TEXT NOT NULL,
-                CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-            COMMIT;""")
-
-	cursor.close()
+	execute_query(cursor, create_tables())
 
 	conn.close()
 
@@ -61,6 +44,7 @@ def setup() -> tuple:
            "birth_date": "04/01/1945",
            "address": "Conjunto Residencial 1 Condomínio 1 Bloco C, 568"}])
 
+
 @mark.skip(reason="")
 def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
@@ -68,12 +52,13 @@ def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
 	assert match(pattner_name, setup[1][0]["name"])
 
+
 @mark.skip(reason="")
 def test_post_customer_200(setup: tuple) -> None:
 
 	uri, customer = setup
-	
-	input_data = json.dumps(customer[1])
+
+	input_data = dumps(customer[1])
 
 	headers = {'Content-Type': 'application/json'}
 
@@ -89,7 +74,7 @@ def test_get_all_customers(setup) -> None:
 
 	for customer in customers:
 
-		input_data = json.dumps(customer)
+		input_data = dumps(customer)
 
 		headers = {'Content-Type': 'application/json'}
 
@@ -102,11 +87,13 @@ def test_get_all_customers(setup) -> None:
 	assert 200 == response.status_code and [] != response
 
 # @mark.skip(reason="")
+
+
 def test_get_by_customer_id(setup) -> None:
 
 	uri, customers = setup
-	
-	input_data = json.dumps(customers[1])
+
+	input_data = dumps(customers[1])
 
 	headers = {'Content-Type': 'application/json'}
 
@@ -114,16 +101,17 @@ def test_get_by_customer_id(setup) -> None:
 
 	response = get(f'{uri}{1}')
 
-	print("response:>>>>>>>>>>", json.loads(response.content))
+	print("response:>>>>>>>>>>", loads(response.content))
 
 	assert 200 == response.status_code and () != response
+
 
 @mark.skip(reason="")
 def test_get_customer_by_cpf(setup) -> None:
 
 	uri, customers = setup
-	
-	input_data = json.dumps(customers[1])
+
+	input_data = dumps(customers[1])
 
 	headers = {'Content-Type': 'application/json'}
 
