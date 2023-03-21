@@ -119,19 +119,17 @@ def test_get_by_customer_id(setup) -> None:
 	assert 200 == response.status_code and response.json().get("customer")
 
 
-@mark.skip(reason="")
+# @mark.skip(reason="")
 def test_get_customer_by_cpf(setup) -> None:
 
 	uri, customer = setup
-
-	input_data = dumps(customer[1])
+	
+	input_data = dumps(customer)
 
 	headers = {'Content-Type': 'application/json'}
 
 	post(uri, input_data, headers=headers)
 
-	response = get(f'{uri}{customer[1]}')
-
-	print("response:>>>>>>>>>>", response.json().get("customer"))
+	response = get(f'{uri}{customer.get("cpf")}')
 
 	assert 200 == response.status_code and response.json().get("customer")
