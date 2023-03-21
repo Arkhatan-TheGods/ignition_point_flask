@@ -30,7 +30,7 @@ def setup() -> tuple:
 
 	conn.close()
 
-	return ('http://127.0.0.1:8080/customers/',
+	return ('http://127.0.0.1:8080/customers',
          {"name": "Yago André Almada",
           "cpf": "942.554.492-10",
           "birth_date": "27/01/2002",
@@ -91,15 +91,17 @@ def test_post_customer_200(setup: tuple) -> None:
 
 	headers = {'Content-Type': 'application/json'}
 
-	response = post(uri, input_data, headers=headers)
+	response = post(f"{uri}/", input_data, headers=headers)
 
 	assert 200 == response.status_code
 
 
 # @mark.skip(reason="")
 def test_get_all_customers(setup_customers) -> None:
+	
+	uri = setup_customers
 
-	response = get(setup_customers)
+	response = get(f"{uri}/")
 
 	assert 200 == response.status_code and response.json().get("customers")
 
@@ -114,7 +116,7 @@ def test_get_by_customer_id(setup) -> None:
 
 	post(uri, input_data, headers=headers)
 
-	response = get(f'{uri}{1}')
+	response = get(f'{uri}/{1}')
 
 	assert 200 == response.status_code and response.json().get("customer")
 
@@ -130,6 +132,21 @@ def test_get_customer_by_cpf(setup) -> None:
 
 	post(uri, input_data, headers=headers)
 
-	response = get(f'{uri}{customer.get("cpf")}')
+	response = get(f'{uri}/{customer.get("cpf")}')
+
+	assert 200 == response.status_code and response.json().get("customer")
+
+
+def test_get_customer_by_name(setup) -> None:
+
+	uri, customer = setup
+	
+	input_data = dumps(customer)
+
+	headers = {'Content-Type': 'application/json'}
+
+	post(uri, input_data, headers=headers)
+
+	response = get(f'{uri}/{customer.get("name")}/name')
 
 	assert 200 == response.status_code and response.json().get("customer")
