@@ -1,7 +1,7 @@
 from pytest import fixture, mark
 from typing import Iterable
 from main.infra.db.db_context import Connection, Cursor, execute_connect
-from main.infra.db.query_tables import query_tables
+from main.infra.db.query_tables import create_tables,drop_tables
 
 @fixture
 def setup() -> Iterable:
@@ -28,7 +28,7 @@ def test_check_create_and_find_customer_id(setup: tuple[Connection, Cursor, tupl
     conn, cursor, customer = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("""
     INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
@@ -49,7 +49,7 @@ def test_check_edit_customer_id(setup: tuple[Connection, Cursor, tuple]):
     conn, cursor, customer = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("""
     INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
@@ -90,7 +90,7 @@ def test_check_remove_customer_by_id(setup: tuple[Connection, Cursor, tuple]):
     conn, cursor, customer = setup
 
     # Act
-    cursor.executescript(query_tables())
+    cursor.executescript(create_tables())
 
     cursor.execute("""
     INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) 
