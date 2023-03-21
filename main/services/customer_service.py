@@ -1,7 +1,7 @@
 
 def customer_service(customer_validator: tuple, customer_repository: dict) -> dict:
 
-    check_data_entry, check_paramter = customer_validator
+    check_data_entry, check_id_parameter, check_cpf_parameter = customer_validator
 
     @check_data_entry
     def add(costumer: tuple) -> None:
@@ -12,14 +12,14 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
         
         return customer_repository['all']()
 
-    @check_paramter
+    @check_id_parameter
     def get_by_id(customer_id: tuple) -> tuple:
 
         return customer_repository['get_by_id'](customer_id)
 
-    @check_paramter
+    @check_cpf_parameter
     def get_by_cpf(cpf: tuple) -> tuple:
-
+        
         return customer_repository['get_by_cpf'](cpf)
 
     @check_data_entry

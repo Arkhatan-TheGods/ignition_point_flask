@@ -4,6 +4,9 @@ from datetime import datetime
 
 def customer_validator() -> tuple:
 
+    PATTNER_CPF = "\\d{3}\\.\\d{3}(\\.\\d{3}\\-\\d{2})"
+    PATTNER_NAME = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
+
     def validate_date(date_text: str, mask: str) -> bool:
 
         print(datetime.strptime(date_text, mask).strftime(mask))
@@ -15,23 +18,21 @@ def customer_validator() -> tuple:
         except ValueError:
             return False
 
-    def form_data_validation(args: tuple) -> list:
+    def input_data_validation(args: tuple) -> list:
 
         name, cpf, birth_date, address = args
 
         notifications = []
-        pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
-        pattner_cpf = "\\d{3}\\.\\d{3}(\\.\\d{3}\\-\\d{2})"
 
-        print(match(pattner_cpf, cpf))
+        print(match(PATTNER_CPF, cpf))
 
         if len(name) < 1:
             notifications.append("Campo name não informado")
         else:
-            if match(pattner_name, name) is None:
+            if match(PATTNER_NAME, name) is None:
                 notifications.append("Campo nome inválido")
 
-        if match(pattner_cpf, cpf) is None:
+        if match(PATTNER_CPF, cpf) is None:
             notifications.append("Formato inválido para campo cpf")
 
         if len(birth_date) < 1:
@@ -45,8 +46,12 @@ def customer_validator() -> tuple:
 
         return notifications
 
-    def id_validation(customer_id: int) -> str | None:
+    def validation_by_id(customer_id: int) -> str | None:
 
         return "Id cliente inválido" if customer_id == 0 else None
 
-    return form_data_validation, id_validation
+    def validation_by_CPF(cpf: str) -> str | None:
+        return "Formato inválido para campo cpf" \
+            if match(PATTNER_CPF, cpf) is None else None
+
+    return input_data_validation, validation_by_id, validation_by_CPF
