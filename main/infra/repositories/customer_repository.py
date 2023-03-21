@@ -2,9 +2,8 @@ def customer_repository(repository: dict) -> dict:
 
     def add(customer: tuple) -> tuple:
 
-        return repository['execute']("""INSERT INTO 
-        CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) \
-            VALUES(:NAME, :CPF, :BIRTH_DATE, :ADDRESS);""", customer)
+        return repository['execute']("INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) \
+            VALUES(:NAME, :CPF, :BIRTH_DATE, :ADDRESS);", customer)
 
     def get_all() -> list[tuple]:
         return repository['all']("SELECT ID, NAME, CPF, BIRTH_DATE, ADDRESS \
@@ -14,8 +13,6 @@ def customer_repository(repository: dict) -> dict:
 
         customer = repository['fetchone']("SELECT ID, NAME, CPF, BIRTH_DATE, ADDRESS \
                                       FROM CUSTOMERS WHERE ID = :ID;", customer_id)
-
-        print("customer>>>>>>>>>>>>>000000>repository.get_by_id", customer)
 
         return customer
 

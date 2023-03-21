@@ -17,9 +17,9 @@ def customers_controller(controller: Callable) -> dict:
         return "Cliente cadastrado com sucesso", 200
 
     @controller
-    def get_customer(services: dict) -> tuple:
+    def get_customers(services: dict) -> tuple:
 
-        return services["all"](), 200
+        return {"customers": services["all"]()}, 200
 
     @controller
     def get_by_id(services: dict, **kwargs: dict) -> tuple:
@@ -32,6 +32,6 @@ def customers_controller(controller: Callable) -> dict:
         return services["get_by_id"]((kwargs.get("cpf"),)), 200
 
     return {'create': create,
-            'all': get_customer,
+            'all': get_customers,
             'get_by_id': get_by_id,
             'get_by_cpf': get_by_cpf}

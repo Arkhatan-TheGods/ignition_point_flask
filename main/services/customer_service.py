@@ -8,7 +8,7 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
 
         customer_repository['add'](costumer)
 
-    def get_all() -> list[tuple]:
+    def get_all() -> tuple:
         
         return customer_repository['all']()
 
