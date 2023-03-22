@@ -33,7 +33,7 @@ def customer_validator() -> tuple:
         if len(cpf) < 1:
             notifications.append("Campo cpf não informado")
 
-        elif match(PATTERN_CPF, cpf) is None:
+        if match(PATTERN_CPF, cpf) is None:
             notifications.append("Formato inválido para campo cpf")
 
         if len(birth_date) < 1:
