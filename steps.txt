@@ -4,3 +4,7 @@ nela são injetados/argumentados no caso o app e o controller que no caso é o c
 na qual possui a função principal de identificar o serviço, o método e irá retornar um dicionário para ser manipulado dentro de um container
 que irá chamar o costumer_service(e outros) na qual será injetado o costumer_repository e será também injetado dentro dele o repository
 que irá fazer as operações de execute, fetchone, fetchall.
+
+passos atuais:
+    criar rotas de atualizar e deletar customer/products.
+    criar testes para validação de rotas.
