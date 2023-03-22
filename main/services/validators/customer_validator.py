@@ -4,8 +4,8 @@ from datetime import datetime
 
 def customer_validator() -> tuple:
 
-    PATTNER_CPF = "\\d{3}\\.\\d{3}(\\.\\d{3}\\-\\d{2})"
-    PATTNER_NAME = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
+    PATTERN_CPF = "\\d{3}\\.\\d{3}(\\.\\d{3}\\-\\d{2})"
+    PATTERN_NAME = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
     def validate_date(date_text: str, mask: str) -> bool:
 
@@ -27,10 +27,13 @@ def customer_validator() -> tuple:
         if len(name) < 1:
             notifications.append("Campo nome não informado")
         else:
-            if match(PATTNER_NAME, name) is None:
+            if match(PATTERN_NAME, name) is None:
                 notifications.append("Campo nome inválido")
 
-        if match(PATTNER_CPF, cpf) is None:
+        if len(cpf) < 1:
+            notifications.append("Campo cpf não informado")
+
+        elif match(PATTERN_CPF, cpf) is None:
             notifications.append("Formato inválido para campo cpf")
 
         if len(birth_date) < 1:
@@ -50,7 +53,7 @@ def customer_validator() -> tuple:
 
     def validation_by_CPF(cpf: str) -> str | None:
         return "Formato inválido para campo cpf" \
-            if match(PATTNER_CPF, cpf) is None else None
+            if match(PATTERN_CPF, cpf) is None else None
 
     def validation_by_name(name: str) -> list:
 
@@ -59,7 +62,7 @@ def customer_validator() -> tuple:
         if len(name.strip()) < 3:
             notifications.append("Campo nome deve possuir mínimo de 3 caracteres")
         else:
-            if match(PATTNER_NAME, name) is None:
+            if match(PATTERN_NAME, name) is None:
                 notifications.append("Campo nome inválido")
 
         return notifications

@@ -77,9 +77,9 @@ def setup_customers():
 # @mark.skip(reason="")
 def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
-	pattner_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
+	pattern_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
-	assert match(pattner_name, setup[1]["name"])
+	assert match(pattern_name, setup[1]["name"])
 
 
 # @mark.skip(reason="")
