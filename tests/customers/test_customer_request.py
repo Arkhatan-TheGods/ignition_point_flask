@@ -159,7 +159,7 @@ def test_get_customer_by_name(setup) -> None:
     assert 200 == response.status_code and response.json().get("customer")
 
 
-def test_update_costumer_by_id(setup) -> None:
+def test_update_customer_by_id(setup) -> None:
 
     uri, customer = setup
 
@@ -175,6 +175,15 @@ def test_update_costumer_by_id(setup) -> None:
 
     response_put = put(f'{uri}/{1}', input_data, headers=headers)
 
-    response = get(f'{uri}/{1}')
-
     assert 204 == response_put.status_code and customer['name'] == response.json().get('customer')[1]
+
+
+def test_delete_customer_by_id(setup) -> None:
+
+    uri, customer = setup
+
+    input_data = dumps(customer)
+
+    headers = {'Content-Type': 'application/json'}
+
+    post(uri, input_data, headers=headers)

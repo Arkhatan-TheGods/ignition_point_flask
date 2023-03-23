@@ -27,7 +27,7 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
         
         return customer_repository['get_by_name'](name)
 
-    #@check_data_entry
+    # TODO: ajustar input_data_validation para que possa servir também no put
     def update_by_id(customer: tuple) -> None:
         return customer_repository['update_by_id'](customer)
         

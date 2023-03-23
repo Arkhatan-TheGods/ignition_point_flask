@@ -32,8 +32,8 @@ def customer_repository(repository: dict) -> dict:
         return repository['execute']("UPDATE CUSTOMERS SET NAME = :name, CPF = :cpf,\
                                      BIRTH_DATE = :birth_date, ADDRESS = :adress WHERE ID = :id ;", customer)
 
-    def remove(id:int) -> None:
-        return repository['execute']("", id)
+    def delete_by_id(id:int) -> None:
+        return repository['execute']("DELETE CUSTOMERS WHERE ID = :ID ;", id)
 
 
     return {'add': add,
@@ -42,4 +42,4 @@ def customer_repository(repository: dict) -> dict:
             'get_by_cpf': get_by_cpf,
             'get_by_name': get_by_name,
             'update_by_id': update_by_id,
-            'remove': remove}
+            'delete_by_id': delete_by_id}
