@@ -15,8 +15,7 @@ from services.validators.customer_validator import customer_validator
 
 def container(cursor: Cursor) -> tuple:
 
-    customer = customer_service(customer_decorator(customer_validator()),
-                                customer_repository(repository(cursor)))
+    customer = customer_service(customer_decorator(customer_validator()),customer_repository(repository(cursor)))
 
     products = product_service(products_repository(repository(cursor)))
 

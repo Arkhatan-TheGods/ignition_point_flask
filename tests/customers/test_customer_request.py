@@ -2,7 +2,7 @@ from main.config import get_config
 from sqlite3 import Connection, connect
 from re import match
 from pytest import mark, fixture
-from requests import get, post
+from requests import get, post, put
 from main.infra.db.query_tables import drop_tables, create_tables
 from main.infra.db.execute_query import execute_query
 from json import dumps
@@ -10,52 +10,53 @@ from json import dumps
 
 @fixture
 def setup() -> tuple:
-	# TODO: implementar versionamento /api/v1/
+    # TODO: implementar versionamento /api/v1/
 
-	config = get_config()
+    config = get_config()
 
-	data_base = config.get('file_db')
+    data_base = config.get('file_db')
 
-	if data_base is None:
-		raise Exception(
-			"Data base não identificado, verificar arquivo settings.yaml")
+    if data_base is None:
+        raise Exception(
+            "Data base não identificado, verificar arquivo settings.yaml")
 
-	conn = connect(data_base)
+    conn = connect(data_base)
 
-	cursor = conn.cursor()
+    cursor = conn.cursor()
 
-	execute_query(cursor, drop_tables())
+    execute_query(cursor, drop_tables())
 
-	execute_query(cursor, create_tables())
+    execute_query(cursor, create_tables())
 
-	conn.close()
+    conn.close()
 
-	return ('http://127.0.0.1:8080/customers',
-         {"name": "Yago André Almada",
-          "cpf": "942.554.492-10",
-          "birth_date": "27/01/2002",
-          "address": "Quadra 12 Conjunto F, 311"})
+    return ('http://127.0.0.1:8080/customers',
+            {"name": "Yago André Almada",
+             "cpf": "942.554.492-10",
+             "birth_date": "27/01/2002",
+             "address": "Quadra 12 Conjunto F, 311"})
+
 
 @fixture
 def setup_customers():
 
-	config = get_config()
+    config = get_config()
 
-	data_base = config.get('file_db')
+    data_base = config.get('file_db')
 
-	if data_base is None:
-		raise Exception(
-			"Data base não identificado, verificar arquivo settings.yaml")
+    if data_base is None:
+        raise Exception(
+            "Data base não identificado, verificar arquivo settings.yaml")
 
-	conn = connect(data_base)
+    conn = connect(data_base)
 
-	cursor = conn.cursor()
+    cursor = conn.cursor()
 
-	execute_query(cursor, drop_tables())
+    execute_query(cursor, drop_tables())
 
-	execute_query(cursor, create_tables())
+    execute_query(cursor, create_tables())
 
-	cursor.executemany("INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) \
+    cursor.executemany("INSERT INTO CUSTOMERS(NAME, CPF, BIRTH_DATE, ADDRESS) \
             VALUES(:NAME, :CPF, :BIRTH_DATE, :ADDRESS);", [("Yago André Almada",
                                                             "942.554.492-10",
                                                             "27/01/2002",
@@ -68,85 +69,112 @@ def setup_customers():
                                                             "219.581.745-30",
                                                             "04/01/1945",
                                                             "Conjunto Residencial 1 Condomínio 1 Bloco C, 568")])
-	
-	conn.commit()
-	conn.close()
 
-	return 'http://127.0.0.1:8080/customers/'
+    conn.commit()
+    conn.close()
+
+    return 'http://127.0.0.1:8080/customers/'
 
 # @mark.skip(reason="")
+
+
 def test_only_portuguese_words_with_space(setup: tuple) -> None:
 
-	pattern_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
+    pattern_name = "^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ\\s]+$"
 
-	assert match(pattern_name, setup[1]["name"])
+    assert match(pattern_name, setup[1]["name"])
 
 
 # @mark.skip(reason="")
 def test_post_customer_200(setup: tuple) -> None:
 
-	uri, customer = setup
+    uri, customer = setup
 
-	input_data = dumps(customer)
+    input_data = dumps(customer)
 
-	headers = {'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
 
-	response = post(f"{uri}/", input_data, headers=headers)
+    response = post(f"{uri}/", input_data, headers=headers)
 
-	assert 200 == response.status_code
+    assert 201 == response.status_code
 
 
 # @mark.skip(reason="")
 def test_get_all_customers(setup_customers) -> None:
-	
-	uri = setup_customers
 
-	response = get(f"{uri}/")
+    uri = setup_customers
 
-	assert 200 == response.status_code and response.json().get("customers")
+    response = get(f"{uri}/")
+
+    assert 200 == response.status_code and response.json().get("customers")
 
 # @mark.skip(reason="")
+
+
 def test_get_by_customer_id(setup) -> None:
 
-	uri, customer = setup
+    uri, customer = setup
 
-	input_data = dumps(customer)
+    input_data = dumps(customer)
 
-	headers = {'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
 
-	post(uri, input_data, headers=headers)
+    post(uri, input_data, headers=headers)
 
-	response = get(f'{uri}/{1}')
+    response = get(f'{uri}/{1}')
 
-	assert 200 == response.status_code and response.json().get("customer")
+    assert 200 == response.status_code and response.json().get("customer")
 
 
 # @mark.skip(reason="")
 def test_get_customer_by_cpf(setup) -> None:
 
-	uri, customer = setup
-	
-	input_data = dumps(customer)
+    uri, customer = setup
 
-	headers = {'Content-Type': 'application/json'}
+    input_data = dumps(customer)
 
-	post(uri, input_data, headers=headers)
+    headers = {'Content-Type': 'application/json'}
 
-	response = get(f'{uri}/{customer.get("cpf")}')
+    post(uri, input_data, headers=headers)
 
-	assert 200 == response.status_code and response.json().get("customer")
+    response = get(f'{uri}/{customer.get("cpf")}')
+
+    assert 200 == response.status_code and response.json().get("customer")
 
 
 def test_get_customer_by_name(setup) -> None:
 
-	uri, customer = setup
-	
-	input_data = dumps(customer)
+    uri, customer = setup
 
-	headers = {'Content-Type': 'application/json'}
+    input_data = dumps(customer)
 
-	post(uri, input_data, headers=headers)
+    headers = {'Content-Type': 'application/json'}
 
-	response = get(f'{uri}/{customer.get("name")}/name')
+    post(uri, input_data, headers=headers)
 
-	assert 200 == response.status_code and response.json().get("customer")
+    response = get(f'{uri}/{customer.get("name")}/name')
+
+    # print(response.json().get("customer"))
+
+    assert 200 == response.status_code and response.json().get("customer")
+
+
+def test_update_costumer_by_id(setup) -> None:
+
+    uri, customer = setup
+
+    input_data = dumps(customer)
+
+    headers = {'Content-Type': 'application/json'}
+
+    post(uri, input_data, headers=headers)
+
+    customer['name'] = 'João Grilo'
+
+    input_data = dumps(customer)
+
+    response_put = put(f'{uri}/{1}', input_data, headers=headers)
+
+    response = get(f'{uri}/{1}')
+
+    assert 204 == response_put.status_code and customer['name'] == response.json().get('customer')[1]

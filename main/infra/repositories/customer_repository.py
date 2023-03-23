@@ -27,8 +27,10 @@ def customer_repository(repository: dict) -> dict:
                                       FROM CUSTOMERS WHERE LOWER(NAME) LIKE :NAME LIMIT 5;", (f"{name[0]}%", ))
 
 
-    def edit(values: tuple) -> None:
-        return repository['execute']("", values)
+    def update_by_id(customer: tuple) -> None:
+        
+        return repository['execute']("UPDATE CUSTOMERS SET NAME = :name, CPF = :cpf,\
+                                     BIRTH_DATE = :birth_date, ADDRESS = :adress WHERE ID = :id ;", customer)
 
     def remove(id:int) -> None:
         return repository['execute']("", id)
@@ -39,5 +41,5 @@ def customer_repository(repository: dict) -> dict:
             'get_by_id': get_by_id,
             'get_by_cpf': get_by_cpf,
             'get_by_name': get_by_name,
-            'edit': edit,
+            'update_by_id': update_by_id,
             'remove': remove}

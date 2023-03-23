@@ -35,7 +35,7 @@ def customers_controller(controller_decorator: Callable) -> dict:
 
     @controller_decorator
     def get_by_name(services: dict, **kwargs: dict) -> tuple:
-    
+
         return {"customer": services["get_by_name"]((kwargs.get("name"),))}, 200
 
     @controller_decorator
@@ -45,9 +45,16 @@ def customers_controller(controller_decorator: Callable) -> dict:
             raise Exception(TypeException.CUSTOMER,
                             {"error": 'Header Error'}, 415)
 
-        customer = tuple(request.get_json().values())
+        customer = request.get_json()
+        print(customer)
 
-        return {"customer": services["update_by_id"]((kwargs.get("costumer_id"),))}, 202
+        services["update_by_id"]((customer['name'],
+                                  customer['cpf'],
+                                  customer['birth_date'],
+                                  customer['address'],
+                                  kwargs.get("customer_id")))
+
+        return 'cliente alterado com sucesso', 204
 
     return {'create': create,
             'all': get_customers,

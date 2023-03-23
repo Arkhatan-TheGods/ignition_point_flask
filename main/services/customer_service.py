@@ -27,33 +27,14 @@ def customer_service(customer_validator: tuple, customer_repository: dict) -> di
         
         return customer_repository['get_by_name'](name)
 
-
-    @check_data_entry
-    def update(customer, id: int) -> None:
-        pass
-        # result = costumer['get_costumer_by_id'](ID)
-
-        # values_dict = {
-        #     'nome': result[1],
-        #     'cpf': result[2],
-        #     'data_nascimento': result[3],
-        #     'endereço': result[4], }
-
-        # print(result, '\n dê enter para manter os valores atuais.')
-        # for key in values_dict:
-        #     novo_valor = input(f"novo valor para {c}: ").strip()
-        #     if novo_valor != "":
-        #         dados[key] = novo_valor
-
-        # return (values_dict['nome'],
-        #         values_dict['cpf'],
-        #         values_dict['data_nascimento'],
-        #         values_dict['endereço'], ID)
-
+    #@check_data_entry
+    def update_by_id(customer: tuple) -> None:
+        return customer_repository['update_by_id'](customer)
+        
     return {'add': add,
             'all': get_all,
             'get_by_id': get_by_id,
             'get_by_cpf': get_by_cpf,
             'get_by_name': get_by_name,
-            'update': update}
+            'update_by_id': update_by_id}
             
