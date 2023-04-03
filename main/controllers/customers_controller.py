@@ -39,7 +39,7 @@ def customers_controller(controller_decorator: Callable) -> dict:
         return {"customer": services["get_by_name"]((kwargs.get("name"),))}, 200
 
     @controller_decorator
-    def update_by_id(services: dict, **kwargs: dict):
+    def update_by_id(services: dict, **kwargs: dict) -> tuple:
 
         if request.headers['Content-Type'] != 'application/json':
             raise Exception(TypeException.CUSTOMER,

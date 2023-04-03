@@ -123,6 +123,8 @@ def test_get_by_customer_id(setup) -> None:
 
     response = get(f'{uri}/{1}')
 
+    print(response.json())
+
     assert 200 == response.status_code and response.json().get("customer")
 
 
@@ -154,12 +156,12 @@ def test_get_customer_by_name(setup) -> None:
 
     response = get(f'{uri}/{customer.get("name")}/name')
 
-    # print(response.json().get("customer"))
+    print(response.json().get("customer"))
 
     assert 200 == response.status_code and response.json().get("customer")
 
 
-def test_update_customer_by_id(setup) -> None:
+def test_update_customer_name_by_id(setup) -> None:
 
     uri, customer = setup
 
@@ -175,7 +177,9 @@ def test_update_customer_by_id(setup) -> None:
 
     response_put = put(f'{uri}/{1}', input_data, headers=headers)
 
-    assert 204 == response_put.status_code and customer['name'] == response.json().get('customer')[1]
+    response = get(f'{uri}/{customer.get("name")}/name')
+
+    assert 204 == response_put.status_code and customer['name'] == response.json().get('customer')[0][1]
 
 
 def test_delete_customer_by_id(setup) -> None:
