@@ -18,7 +18,7 @@ def customer_validator() -> tuple:
         except ValueError:
             return False
 
-    def input_data_validation(data: tuple) -> list:
+    def data_validation(data: tuple) -> list:
 
         name, cpf, birth_date, address = data
 
@@ -67,7 +67,7 @@ def customer_validator() -> tuple:
 
         return notifications
 
-    return (input_data_validation, 
+    return (data_validation, 
             validation_by_id, 
             validation_by_CPF, 
             validation_by_name)
