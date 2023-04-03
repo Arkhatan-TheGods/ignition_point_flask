@@ -182,6 +182,70 @@ def test_update_customer_name_by_id(setup) -> None:
     assert 204 == response_put.status_code and customer['name'] == response.json().get('customer')[0][1]
 
 
+def test_update_customer_cpf_by_id(setup) -> None:
+
+    uri, customer = setup
+
+    input_data = dumps(customer)
+
+    headers = {'Content-Type': 'application/json'}
+
+    post(uri, input_data, headers=headers)
+
+    customer['cpf'] = '123.456.789-00'
+
+    input_data = dumps(customer)
+
+    response_put = put(f'{uri}/{1}', input_data, headers=headers)
+
+    response = get(f'{uri}/{customer.get("cpf")}')
+
+    assert 204 == response_put.status_code and customer['cpf'] == response.json().get('customer')[2]
+
+
+def test_update_customer_birth_by_id(setup) -> None:
+
+    uri, customer = setup
+
+    input_data = dumps(customer)
+
+    headers = {'Content-Type': 'application/json'}
+
+    post(uri, input_data, headers=headers)
+
+    customer['birth_date'] = '01/01/2000'
+
+    input_data = dumps(customer)
+
+    response_put = put(f'{uri}/{1}', input_data, headers=headers)
+
+    response = get(f'{uri}/{1}')
+    print('>>>>>>>>>>',response.json())
+
+    assert 204 == response_put.status_code and customer['birth_date'] == response.json().get('customer')[3]
+
+def test_update_customer_adress_by_id(setup) -> None:
+
+    uri, customer = setup
+
+    input_data = dumps(customer)
+
+    headers = {'Content-Type': 'application/json'}
+
+    post(uri, input_data, headers=headers)
+
+    customer['address'] = 'Av. Paulista, 3000, São Paulo/SP'
+
+    input_data = dumps(customer)
+
+    response_put = put(f'{uri}/{1}', input_data, headers=headers)
+
+    response = get(f'{uri}/{1}')
+    print('>>>>>>>>>>',response.json())
+
+    assert 204 == response_put.status_code and customer['address'] == response.json().get('customer')[4]
+
+
 def test_delete_customer_by_id(setup) -> None:
 
     uri, customer = setup
